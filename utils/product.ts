@@ -7,7 +7,7 @@ export const product = {
     brand: "Apple",
     category: "Phone",
     inStock: true,
-    quantity:10,
+    qty:10,
     images: [
       {
         color: "Black",

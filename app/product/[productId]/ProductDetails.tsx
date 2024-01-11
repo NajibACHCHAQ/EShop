@@ -1,16 +1,42 @@
 'use client'
 
 import { Rating } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 interface ProductDetailsProps{
     product:any
 }
 
+export type CartProductType={
+    id:string,
+    name:string,
+    description:string,
+    brand:string,
+    selectedImg:SelectedTypeImg,
+    qty:number,
+    price:number
+}
+export type SelectedTypeImg ={
+    color:string,
+    colorCode:string,
+    image:string
+}
 const Horizontal =()=>{
     return<hr className='w-[30% my-2]'/>
 }
+
 export const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
+const[cartProduct,setCartProduct] = useState <CartProductType>({
+    id:product.id,
+    name:product.name,
+    description:product.description,
+    brand:product.brand,
+    selectedImg:{...product.images[0]},
+    qty:10,
+    price:product.price,
+})
+
     const productRating = product.reviews.reduce((acc:number,item:any) => item.rating + acc,0) / product.reviews.length;
+
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 gap-12'>
         <div>Images</div>
@@ -29,10 +55,16 @@ export const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
             <div>
                 <span className='font-semibold'>MARQUE : </span>{product.BRAND}
             </div>
-            <div>
+            <div className={product.inStock ? 'text-teal-400 font-bold' : 'text-grey-400'}>
                 {/* {product.inStock ? 'En stock' : 'Rupture de stock'} */}
-                {product.quantity >0 ? 'En stock ' + product.quantity : 'Rupture de stock'}
+                {product.qty >0 ? 'En stock ' + product.qty : 'Rupture de stock'}
             </div>
+            <Horizontal/>
+            <div>couleur</div>
+            <Horizontal/>
+            <div>quantitée</div>
+            <Horizontal/>
+            <div>Ajouter au panier</div>
         </div>
     </div>
   )
