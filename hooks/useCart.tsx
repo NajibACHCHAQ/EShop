@@ -15,7 +15,8 @@ interface Props{
     [propName:string]:any;
 }
 export const CartContextProvider = (props:Props)=>{
-    const[cartTotalQty,setCartTotalQty] = useState(10)
+    const[cartTotalQty,setCartTotalQty] = useState(0);
+    
     const [cartProducts, setCartProducts] = useState<CartProductType[] | null>(null)
     useEffect(()=>{
         const cartItems: any = localStorage.getItem('eShopCartItems')
