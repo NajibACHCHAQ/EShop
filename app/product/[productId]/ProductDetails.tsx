@@ -4,6 +4,7 @@ import { Button } from '@/app/components/Button';
 import { ProductImages } from '@/app/components/products/ProductImages';
 import { SetColor } from '@/app/components/products/SetColor';
 import { SetQuantity } from '@/app/components/products/SetQuantity';
+import { useCart } from '@/hooks/useCart';
 import { Rating } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 
