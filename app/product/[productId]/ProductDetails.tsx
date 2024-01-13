@@ -37,6 +37,7 @@ const Horizontal = () => {
 
 // Composant principal ProductDetails
 export const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
+    const {handleAddProductToCart, cartProducts} = useCart()
     // État local pour stocker le produit ajouté au panier
     const [cartProduct, setCartProduct] = useState<CartProductType>({
         id: product.id,
@@ -50,6 +51,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
 
     // Affichage des informations du produit ajouté au panier dans la console
     console.log(cartProduct);
+    console.log(cartProducts)
 
     // Calcul de la note moyenne du produit à partir des avis
     const productRating =
@@ -151,7 +153,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
                     <Button
                         label='Ajouter au panier'
                         onClick={() => {
-                            // Ajoutez ici la logique pour ajouter le produit au panier
+                           handleAddProductToCart(cartProduct)
                         }}
                     />
                 </div>
