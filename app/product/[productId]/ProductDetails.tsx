@@ -6,7 +6,9 @@ import { SetColor } from '@/app/components/products/SetColor';
 import { SetQuantity } from '@/app/components/products/SetQuantity';
 import { useCart } from '@/hooks/useCart';
 import { Rating } from '@mui/material';
-import React, { useCallback, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useCallback, useEffect, useState } from 'react';
+import { MdCheckCircle } from 'react-icons/md';
 
 // Définition de l'interface pour les propriétés du composant ProductDetails
 interface ProductDetailsProps {
@@ -38,6 +40,7 @@ const Horizontal = () => {
 // Composant principal ProductDetails
 export const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
     const {handleAddProductToCart, cartProducts} = useCart()
+    const [isProductInCart, setIsProductInCart] = useState(false)
     // État local pour stocker le produit ajouté au panier
     const [cartProduct, setCartProduct] = useState<CartProductType>({
         id: product.id,
@@ -49,9 +52,21 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
         price: product.price,
     });
 
+    const router = useRouter()
+
     // Affichage des informations du produit ajouté au panier dans la console
     console.log(cartProduct);
     console.log(cartProducts)
+
+    useEffect(()=>{
+        setIsProductInCart(false)
+        if(cartProducts){
+            const existingIndex = cartProducts.findIndex((item)=> item.id === product.id)
+            if(existingIndex > -1){
+                setIsProductInCart(true)
+            }
+        }
+    },[cartProducts])
 
     // Calcul de la note moyenne du produit à partir des avis
     const productRating =
@@ -130,8 +145,18 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
 
                 {/* Ligne horizontale pour la séparation */}
                 <Horizontal />
-
-                {/* Composant pour sélectionner la couleur du produit */}
+                {isProductInCart ? <>
+                    <p className='mb-2 text-slate-500 flex items-center gap-1'>
+                        <MdCheckCircle className='text-teal-400' size={30}/>
+                        <span>Le produit a été ajouté au panier</span>
+                    </p>
+                    <div className='max-w-[300px]'>
+                        <Button label='Voir mon panier' outline onClick={()=>{
+                            router.push("/cart");
+                        } }/>
+                    </div>
+                </> : <>
+                 {/* Composant pour sélectionner la couleur du produit */}
                 {/* Assurez-vous d'utiliser la bonne propriété pour les images */}
                 <SetColor cartProduct={cartProduct} images={product.images} handleColorSelect={handleColorSelect} />
 
@@ -157,6 +182,10 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
                         }}
                     />
                 </div>
+                
+                </>}
+
+               
             </div>
         </div>
     );
