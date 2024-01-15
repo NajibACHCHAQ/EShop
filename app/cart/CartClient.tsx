@@ -11,11 +11,11 @@ import { ItemContent } from './ItemContent'
 
 export const CartClient = () => {
 
-    const {cartProducts} = useCart()
+    const {cartProducts, handleClearCart} = useCart()
     if(!cartProducts || cartProducts.length === 0)
   {
     return (
-    <div className='flex lex-col items-center'>
+    <div className='flex flex-col items-center'>
         <div className='text-2xl'>Votre panier est vide</div>
         <div>
             <Link href={"/"} className='text-slate-500 flex items-center gap-1 mt-2'>
@@ -48,7 +48,7 @@ export const CartClient = () => {
     <div className='border-t-[1.5px] border-slate-20 py-4 flex justify-between gap-4'>
         <div className='w-[120px]' >
             <Button label='Vider le panier' onClick={()=>{
-
+                handleClearCart()
             }} small outline/>
         </div>
         <div className='text-sm flex flex-col gap-1 items-start'>

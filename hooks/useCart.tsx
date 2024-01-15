@@ -1,5 +1,4 @@
 import { CartProductType } from "@/app/product/[productId]/ProductDetails";
-import { product } from "@/utils/product";
 import { createContext, useCallback, useContext, useState,useEffect } from "react";
 import {toast} from 'react-hot-toast'
 type CartContextType = {
@@ -10,6 +9,7 @@ type CartContextType = {
     handleRemoveProductFromCart:(product:CartProductType)=>void;
     handleCartQtyIncrease:(product:CartProductType)=>void;
     handleCartQtyDecrease:(product:CartProductType)=>void;
+    handleClearCart:(product:CartProductType)=>void;
    
 }
 export const CartContext = createContext<CartContextType | null>(null);
@@ -79,7 +79,7 @@ export const CartContextProvider = (props:Props)=>{
 
     const handleCartQtyDecrease = useCallback((product:CartProductType)=>{
         let updatedCart;
-        if(product.quantity === 0){
+        if(product.quantity === 1){
             return alert('oops ! ')
         }
         if(cartProducts){
@@ -94,9 +94,13 @@ export const CartContextProvider = (props:Props)=>{
             localStorage.setItem('eShopCartItems',JSON.stringify(updatedCart))
         }
     }
-
-    
     ,[cartProducts])
+
+    const handleClearCart = useCallback((product:CartProductType)=>{
+        setCartProducts(null)
+        setCartTotalQty(0)
+        localStorage.setItem("eShopCartItems",JSON.stringify(null))
+    },[cartProducts])
 
     const value = {
         cartTotalQty,
@@ -104,7 +108,8 @@ export const CartContextProvider = (props:Props)=>{
         handleAddProductToCart,
         handleRemoveProductFromCart,
         handleCartQtyIncrease,
-        handleCartQtyDecrease
+        handleCartQtyDecrease,
+        handleClearCart
     }
     return <CartContext.Provider value={value} {...props}/>
 }

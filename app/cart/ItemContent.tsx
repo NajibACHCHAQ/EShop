@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { truncateText } from '@/utils/truncateText'
 import { SetQuantity } from '../components/products/SetQuantity'
 import { useCart } from '@/hooks/useCart'
+import { showPopup } from '../components/popup/popup'
 interface ItemContentProps{
     item:CartProductType
 }
