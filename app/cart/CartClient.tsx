@@ -8,10 +8,11 @@ import { FaArrowRight } from "react-icons/fa6";
 import { Heading } from '../components/Heading'
 import { Button } from '../components/Button'
 import { ItemContent } from './ItemContent'
+import { formatPrice } from '@/utils/formatPrice'
 
 export const CartClient = () => {
 
-    const {cartProducts, handleClearCart} = useCart()
+    const {cartProducts, handleClearCart, cartTotalAmount} = useCart()
     if(!cartProducts || cartProducts.length === 0)
   {
     return (
@@ -55,7 +56,7 @@ export const CartClient = () => {
             
                 <div className='flex justify-between w-full text-base font-semibold'>
                     <span>Sous-Total : </span>
-                    <span>1000 €</span>
+                    <span>{formatPrice(cartTotalAmount)}</span>
                 </div>
                 <p className='taxt-slate-500'>Frais et expédition</p>
             <Button label='CheckOut' onClick={()=>{

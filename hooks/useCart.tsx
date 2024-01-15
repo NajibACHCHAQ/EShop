@@ -4,12 +4,13 @@ import {toast} from 'react-hot-toast'
 type CartContextType = {
     
     cartTotalQty:number;
+    cartTotalAmount:number;
     cartProducts:CartProductType[] | null;
     handleAddProductToCart:(product:CartProductType)=>void;
     handleRemoveProductFromCart:(product:CartProductType)=>void;
     handleCartQtyIncrease:(product:CartProductType)=>void;
     handleCartQtyDecrease:(product:CartProductType)=>void;
-    handleClearCart:(product:CartProductType)=>void;
+    handleClearCart:()=>void;
    
 }
 export const CartContext = createContext<CartContextType | null>(null);
@@ -19,7 +20,11 @@ interface Props{
 }
 export const CartContextProvider = (props:Props)=>{
     const[cartTotalQty,setCartTotalQty] = useState(0);   
+    const [cartTotalAmount,setCartTotalAmount] = useState(0)
     const [cartProducts, setCartProducts] = useState<CartProductType[] | null>(null)
+
+    console.log('qty : ', cartTotalQty)
+    console.log('amount : ', cartTotalAmount)
     useEffect(()=>{
         const cartItems: any = localStorage.getItem('eShopCartItems')
         const cProducts: CartProductType[] | null = JSON.parse(cartItems)
@@ -40,17 +45,53 @@ export const CartContextProvider = (props:Props)=>{
         });
     },[])
 
+    useEffect(() => {
+        // La fonction getTotals est appelée à chaque changement dans cartProducts
+        const getTotals = () => {
+            if (cartProducts) {
+                // Utilisation de reduce pour réunir tous les objets d'un tableau
+                const { total, qty } = cartProducts?.reduce((acc, item) => {
+                    // Calcul du montant total pour chaque produit (prix * quantité)
+                    const itemTotal = item.price * item.quantity;
+    
+                    // Mise à jour de l'accumulateur avec les valeurs du produit actuel
+                    // prix total du panier
+                    acc.total += itemTotal;
+                    // total produit panier
+                    acc.qty += item.quantity;
+    
+                    // Retour de l'accumulateur mis à jour
+                    return acc;
+                }, {
+                    total: 0,  // Valeur initiale du total
+                    qty: 0    // Valeur initiale de la quantité
+                });
+    
+                // Mise à jour des états avec les totaux calculés
+                setCartTotalQty(qty);
+                setCartTotalAmount(total);
+            }
+        }
+    
+        // Appel de la fonction pour calculer les totaux lors de chaque changement de cartProducts
+        getTotals();
+    }, [cartProducts]);
+    
 
     const handleRemoveProductFromCart = useCallback((product: CartProductType)=>{
+        // si cartProduct existe donc le panier n'est pas vide
         if(cartProducts){
+            // Creation d'une fonction pour fltrer les produits dans le panier
+            // et conserver uniquement les autres produit que celui cible
             const filteredProduct = cartProducts.filter((item)=>{
+                // return le rest du panier
                 return item.id !== product.id
             })
+            // set le panier avec les produits restant
             setCartProducts(filteredProduct)
             toast.success('produit supprimer')
+                // Stocker le panier dans le local storage
                 localStorage.setItem('eShopCartItems', JSON.stringify(filteredProduct))
-                
-            
             }
         },
         [cartProducts]
@@ -104,6 +145,7 @@ export const CartContextProvider = (props:Props)=>{
 
     const value = {
         cartTotalQty,
+        cartTotalAmount,
         cartProducts,
         handleAddProductToCart,
         handleRemoveProductFromCart,
