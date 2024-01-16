@@ -21,7 +21,7 @@ export const CartClient = () => {
         <div>
             <Link href={"/"} className='text-slate-500 flex items-center gap-1 mt-2'>
                 <MdArrowBack/>
-            <span>Start shopping</span>
+            <span>Visitez la boutique</span>
             </Link>
         </div>
     </div>

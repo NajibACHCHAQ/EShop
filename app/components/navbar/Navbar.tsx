@@ -17,7 +17,7 @@ export const Navbar = () => {
           gap-3
           md:gap-0
           '>
-            <Link href="/" className={`${redressed.className} font-bold text-2xl`}>E-SHOP</Link>
+            <Link href="/" className={`${redressed.className} font-bold text-2xl`}><span className='text-5xl '> @</span>-BOUTIQUE</Link>
             <div className='hidden md:block'>Recherche</div>
             <div className='
             flex 

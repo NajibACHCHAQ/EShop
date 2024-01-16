@@ -2,7 +2,10 @@
 import React, { useState } from 'react'
 import { Heading } from '../components/Heading'
 import { Input } from '../components/inputs/Input'
+import { Button } from '../components/Button'
 import { FieldValues, useForm, SubmitHandler } from 'react-hook-form'
+import Link from 'next/link'
+
 
 
 export const RegisterForm = () => {
@@ -14,6 +17,11 @@ export const RegisterForm = () => {
             password:''
         }
     })
+
+    const onSubmit:SubmitHandler<FieldValues> = (data)=>{
+        setIsLoading(true)
+        console.log(data)
+    }
     return (
         <>
             <Heading title='Créé un compte'/>
@@ -25,8 +33,10 @@ export const RegisterForm = () => {
                 id='email' label='Email' disabled={isLoading} register={register} errors={errors} required 
             />
             <Input 
-                id='password' label='Mot de passe' disabled={isLoading} register={register} errors={errors} required 
+                id='password' label='Mot de passe' disabled={isLoading} register={register} errors={errors} required type='password'
             />
+            <Button label={isLoading ? "Chargement" : "S'enregistrer"} onClick={handleSubmit(onSubmit)} custom='w-[70%]' />
+            <p className='text-sm'>Déja un compte ? <Link href={'/login'} className='underline cursor-pointer'>Se connecter</Link></p>
         </>
   )
 }

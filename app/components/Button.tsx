@@ -10,6 +10,7 @@ interface ButtonProps {
     label: string; // Texte du bouton
     disabled?: boolean; // Option pour désactiver le bouton
     outline?: boolean; // Option pour rendre le bouton avec un contour seulement
+    
     small?: boolean; // Option pour rendre le bouton plus petit
     custom?: string; // Classe CSS personnalisée pour le bouton
     icon?: IconType; // Type d'icône à afficher à côté du texte
@@ -22,6 +23,7 @@ export const Button: React.FC<ButtonProps> = ({
     disabled,
     outline,
     small,
+    
     custom,
     icon: Icon, // Le composant d'icône
     onClick,
@@ -46,6 +48,7 @@ export const Button: React.FC<ButtonProps> = ({
                 ${small ? 'text-sm font-light' : 'text-md font-semibold'}
                 ${small ? 'py-1 px-2 border-[1px]' : 'py-3 px-4 border-2'}
                 ${custom ? custom : ''}
+                
             `}
             onClick={onClick}
         >

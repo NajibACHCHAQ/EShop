@@ -5,7 +5,7 @@ import { RegisterForm } from "./RegisterForm";
 
 export default function first() {
     return(
-        <Container>
+        <Container >
             <FormWrap>
                 <RegisterForm/>
             </FormWrap>
