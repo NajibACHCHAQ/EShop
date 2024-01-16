@@ -9,8 +9,7 @@ import { IconType } from 'react-icons';
 interface ButtonProps {
     label: string; // Texte du bouton
     disabled?: boolean; // Option pour désactiver le bouton
-    outline?: boolean; // Option pour rendre le bouton avec un contour seulement
-    
+    outline?: boolean; // Option pour rendre le bouton avec un contour seulement 
     small?: boolean; // Option pour rendre le bouton plus petit
     custom?: string; // Classe CSS personnalisée pour le bouton
     icon?: IconType; // Type d'icône à afficher à côté du texte

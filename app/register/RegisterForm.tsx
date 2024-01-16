@@ -5,6 +5,7 @@ import { Input } from '../components/inputs/Input'
 import { Button } from '../components/Button'
 import { FieldValues, useForm, SubmitHandler } from 'react-hook-form'
 import Link from 'next/link'
+import { AiOutlineGoogle } from 'react-icons/ai'
 
 
 
@@ -25,9 +26,10 @@ export const RegisterForm = () => {
     return (
         <>
             <Heading title='Créé un compte'/>
+            <Button custom='w-[70%]' outline label="S'enregistrer avec Google" icon={AiOutlineGoogle} onClick={()=>{}}/>
             <hr className='bg-slate-300 w-full h-px'/>
             <Input 
-                id='name' label='Nom' disabled={isLoading} register={register} errors={errors} required placeholder='Saississaez votre nom'
+                id='name' label='Nom' disabled={isLoading} register={register} errors={errors} required placeholder=''
             />
             <Input 
                 id='email' label='Email' disabled={isLoading} register={register} errors={errors} required 
