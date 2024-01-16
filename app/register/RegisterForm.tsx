@@ -14,12 +14,19 @@ export const RegisterForm = () => {
             password:''
         }
     })
-  return (
-    <>
-    <Heading title='Sign Up'/>
-    <hr className='bg-slate-300 w-full h-px'/>
-    <Input 
-    id='name' label='Name' disabled={isLoading} register={register} errors={errors} required />
-    </>
+    return (
+        <>
+            <Heading title='Créé un compte'/>
+            <hr className='bg-slate-300 w-full h-px'/>
+            <Input 
+                id='name' label='Nom' disabled={isLoading} register={register} errors={errors} required placeholder='Saississaez votre nom'
+            />
+            <Input 
+                id='email' label='Email' disabled={isLoading} register={register} errors={errors} required 
+            />
+            <Input 
+                id='password' label='Mot de passe' disabled={isLoading} register={register} errors={errors} required 
+            />
+        </>
   )
 }
