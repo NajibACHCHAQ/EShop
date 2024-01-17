@@ -58,7 +58,7 @@ export const CartClient = () => {
                     <span>Sous-Total : </span>
                     <span>{formatPrice(cartTotalAmount)}</span>
                 </div>
-                <p className='taxt-slate-500'>Frais et expédition</p>
+                <p className='taxt-slate-500 mx-auto'>Frais et expédition</p>
             <Button label='Commander' onClick={()=>{
 
             }} />
