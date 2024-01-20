@@ -4,9 +4,13 @@ import Link from 'next/link'
 import {Redressed} from "next/font/google";
 import { CartCount } from './CartCount';
 import { UserMenu } from './UserMenu';
+import { getCurrentUser } from '@/actions/GetCurrentUser';
 
 const redressed = Redressed({subsets:['latin'],weight:['400']})
-export const Navbar = () => {
+export const Navbar = async () => {
+  const currentUser = await getCurrentUser()
+
+  console.log("user<<<",currentUser)
   return (
     <div className="sticky top-0 w-full bg-slate-300 z-30 shadow-sm">
       <div className="py-4 border-b-[1px]">
@@ -25,8 +29,8 @@ export const Navbar = () => {
             items-center 
             gap-8
             md:gap-12'>
-              <CartCount/>
-              <UserMenu/>
+              <CartCount />
+              <UserMenu currentUser = {currentUser}/>
             </div>
           </div>
         </Container>

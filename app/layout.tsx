@@ -9,6 +9,7 @@ import { toast } from 'react-hot-toast';
 
 
 
+
 const poppins = Poppins({ subsets: ['latin'],weight:
 ['100','200','300','400','500','600','700','800','900'] })
 
@@ -17,11 +18,12 @@ export const metadata: Metadata = {
   description: 'By ANCreative',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+
   //const notify = () => toast('Voici votre toast.');
   return (
     <html lang="fr">
