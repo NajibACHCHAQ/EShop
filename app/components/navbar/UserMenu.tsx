@@ -6,6 +6,7 @@ import React, { useCallback, useState } from 'react'
 import {  AiFillCaretDown } from 'react-icons/ai'
 import { MenuItem } from './MenuItem'
 import { signOut } from 'next-auth/react'
+import { BackDrop } from './BackDrop'
 
 export const UserMenu = () => {
     const [isOpen, setIsOpen] = useState(false)
@@ -41,6 +42,7 @@ export const UserMenu = () => {
                 </div>
             )}
         </div>
+        {isOpen ? <BackDrop onClick={toggleOpen} /> : null}
     
     </>
   )
