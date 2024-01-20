@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Heading } from '../components/Heading'
 import { Input } from '../components/inputs/Input'
 import { Button } from '../components/Button'
@@ -9,10 +9,14 @@ import { AiOutlineGoogle } from 'react-icons/ai'
 import axios from 'axios'
 import {signIn} from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { SafeUser } from '@/types'
+
+interface RegisterFormProps {
+    currentUser: SafeUser | null
+}
 
 
-
-export const RegisterForm = () => {
+export const RegisterForm:React.FC<RegisterFormProps> = ({currentUser}) => {
     const [isLoading, setIsLoading] = useState(false)
     const {register, handleSubmit, formState:{errors}} = useForm<FieldValues>({
         defaultValues:{
@@ -23,6 +27,13 @@ export const RegisterForm = () => {
     })
 
     const router =useRouter()
+
+    useEffect(()=>{
+        if(currentUser){
+            router.push('/cart')
+            router.refresh()
+        }
+    },[])
 
     const onSubmit:SubmitHandler<FieldValues> = (data)=>{
         setIsLoading(true)
@@ -49,6 +60,9 @@ export const RegisterForm = () => {
         }
             
         )
+    }
+    if(currentUser){
+        return <p className='text-center'>Connection reussi !  Redirection en cours ...</p>
     }
     return (
         <>
