@@ -30,7 +30,8 @@ export const Navbar = async () => {
             gap-8
             md:gap-12'>
               <CartCount />
-              <UserMenu currentUser = {currentUser}/>
+              <UserMenu currentUser={currentUser} />
+
             </div>
           </div>
         </Container>

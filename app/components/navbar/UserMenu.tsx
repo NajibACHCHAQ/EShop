@@ -11,14 +11,17 @@ import { User } from '@prisma/client'
 import { SafeUser } from '@/types'
 
 interface UserMenuProps{
-    currentUser: SafeUser
+    currentUser: SafeUser | null;
 }
 
 export const UserMenu:React.FC<UserMenuProps> = ({currentUser}) => {
     const [isOpen, setIsOpen] = useState(false)
+
     const toggleOpen = useCallback(() => {
         setIsOpen((prev) => !prev);
-    },[setIsOpen])
+    },
+    [setIsOpen])
+
   return (
     <>
         <div className='relative z-30'>
@@ -36,6 +39,7 @@ export const UserMenu:React.FC<UserMenuProps> = ({currentUser}) => {
                         <Link href='/admin'>
                             <MenuItem onClick={toggleOpen}>Tableau de bord</MenuItem>
                         </Link>
+                        <hr/>
                          <MenuItem onClick={()=>{toggleOpen(), signOut()}}>Deconnection</MenuItem>
  
                     </div>) : 
