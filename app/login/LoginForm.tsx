@@ -56,7 +56,7 @@ export const LoginForm:React.FC<LoginFormProps> = ({currentUser}) => {
   return (
     <>
     <Heading title='Se connecter'/>
-    <Button custom='w-[70%]' outline label="Se connecter avec Google" icon={AiOutlineGoogle} onClick={()=>{}}/>
+    <Button custom='w-[70%]' outline label="Se connecter avec Google" icon={AiOutlineGoogle} onClick={()=>{signIn('google')}}/>
     <hr className='bg-slate-300 w-full h-px'/>
     <Input 
         id='email' label='Email' disabled={isLoading} register={register} errors={errors} required 

@@ -67,7 +67,7 @@ export const RegisterForm:React.FC<RegisterFormProps> = ({currentUser}) => {
     return (
         <>
             <Heading title='Créé un compte'/>
-            <Button custom='w-[69%]' outline label="S'enregistrer avec Google" icon={AiOutlineGoogle} onClick={()=>{}}/>
+            <Button custom='w-[69%]' outline label="Continuer avec Google" icon={AiOutlineGoogle} onClick={()=>{signIn('google')}}/>
             <hr className='bg-slate-300 w-full h-px'/>
             <Input 
                 id='name' label='Nom' disabled={isLoading} register={register} errors={errors} required placeholder=''
