@@ -6,6 +6,9 @@ import { Button } from '../components/Button'
 import { FieldValues, useForm, SubmitHandler } from 'react-hook-form'
 import Link from 'next/link'
 import { AiOutlineGoogle } from 'react-icons/ai'
+import axios from 'axios'
+import {signIn} from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 
 
@@ -19,14 +22,38 @@ export const RegisterForm = () => {
         }
     })
 
+    const router =useRouter()
+
     const onSubmit:SubmitHandler<FieldValues> = (data)=>{
         setIsLoading(true)
         console.log(data)
+
+        axios.post('/api/register', data).then(()=> {
+            alert('compte crée avec succès')
+            signIn('credentials',{
+                email: data.email,
+                password: data.password,
+                redirect: false,
+            }).then((callback)=>{
+                if(callback?.ok){
+                    router.push('/cart')
+                    router.refresh()
+                    alert('Logged In')
+                }
+                if(callback?.error){
+                    alert('Erreur')
+                }
+            })
+        }).catch(()=> alert('Something wrong')).finally(()=>{
+            setIsLoading(false)
+        }
+            
+        )
     }
     return (
         <>
             <Heading title='Créé un compte'/>
-            <Button custom='w-[70%]' outline label="S'enregistrer avec Google" icon={AiOutlineGoogle} onClick={()=>{}}/>
+            <Button custom='w-[69%]' outline label="S'enregistrer avec Google" icon={AiOutlineGoogle} onClick={()=>{}}/>
             <hr className='bg-slate-300 w-full h-px'/>
             <Input 
                 id='name' label='Nom' disabled={isLoading} register={register} errors={errors} required placeholder=''
