@@ -6,6 +6,7 @@ import { AddressElement, PaymentElement, useElements, useStripe } from '@stripe/
 import React, { useState,useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { Heading } from '../components/Heading'
+import { Button } from '../components/Button'
 
 interface CheckoutFormProps{
     clientSecret:string,
@@ -63,6 +64,10 @@ export const CheckoutForm:React.FC<CheckoutFormProps> = ({clientSecret,handleSet
         }}/>
         <h2 className='font-semibold mt-4 mb-2'>Informations de paiement</h2>
         <PaymentElement id='payment-element' options={{layout:'tabs'}}/>
+        <div className='mt-6 py-4 text-center text-slate-700 text-4xl font-bold'>
+            Total: {formatedPrice}
+        </div>
+        <Button label={isLoading ? 'En cours...' : 'Payer Maintenant'} disabled={isLoading || !stripe || !elements} onClick={()=>{}}/>
     </form>
   )
 }
