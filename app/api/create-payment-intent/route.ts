@@ -13,6 +13,7 @@ const calculateOrderAmount = (items: CartProductType[]) => {
         const itemTotal = item.price * item.quantity;
         return acc + itemTotal;
     }, 0);
+    
 
     return totalPrice;
 }
@@ -34,7 +35,7 @@ export async function POST(request: Request) {
         status:'pending',
         deliveryStatus:'pending',
         paymentIntentId:payment_intent_id,
-        product:items
+        products:items
     }
 
     if(payment_intent_id){
@@ -69,18 +70,18 @@ export async function POST(request: Request) {
     }else{
 
         const paymentIntent = await stripe.paymentIntents.create({
-            amount:total,
-            currency:'eur',
+            amount: total,
+            currency: 'eur',
             automatic_payment_methods:{enabled:true}
-
         });
-
+    
         orderData.paymentIntentId = paymentIntent.id
-
+    
         await prisma.order.create({
-            data:orderData,
+            data: orderData,
         })
-        return NextResponse.json({paymentIntent});
+        return NextResponse.json({ paymentIntent });
+    
 
 
     }
