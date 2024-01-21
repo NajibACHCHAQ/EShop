@@ -31,16 +31,25 @@ export const CartContextProvider = (props:Props)=>{
     console.log('amount : ', cartTotalAmount)
 
 
-    useEffect(()=>{
-        const cartItems: any = localStorage.getItem('eShopCartItems')
-        const cProducts: CartProductType[] | null = JSON.parse(cartItems)
-        const eShopPaymentIntent:any = localStorage.getItem('eShopPaymentIntent')
-        const paymentIntent:string | null = JSON.parse(eShopPaymentIntent)
-
-
-        setCartProducts(cProducts)
-        setPaymentInstant(paymentIntent)
-    },[])
+    useEffect(() => {
+        const cartItems: any = localStorage.getItem('eShopCartItems');
+        const cProducts: CartProductType[] | null = JSON.parse(cartItems);
+        const eShopPaymentIntent: any = localStorage.getItem('eShopPaymentIntent');
+        let paymentIntent: string | null = null;
+    
+        try {
+            // Assurez-vous que eShopPaymentIntent est une chaîne non nulle avant la conversion JSON
+            if (eShopPaymentIntent) {
+                paymentIntent = JSON.parse(eShopPaymentIntent);
+            }
+        } catch (error) {
+            console.error("Erreur lors de la conversion JSON de eShopPaymentIntent :", error);
+        }
+    
+        setCartProducts(cProducts);
+        setPaymentInstant(paymentIntent);
+    }, []);
+    
     const handleAddProductToCart = useCallback((product: CartProductType)=>{
         setCartProducts((prev)=>{
             let updatedCart;

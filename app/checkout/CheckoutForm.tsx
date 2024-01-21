@@ -67,7 +67,10 @@ export const CheckoutForm:React.FC<CheckoutFormProps> = ({clientSecret,handleSet
         <div className='mt-6 py-4 text-center text-slate-700 text-4xl font-bold'>
             Total: {formatedPrice}
         </div>
-        <Button label={isLoading ? 'En cours...' : 'Payer Maintenant'} disabled={isLoading || !stripe || !elements} onClick={()=>{}}/>
+        <Button 
+            label={isLoading ? 'En cours...' : 'Payer Maintenant'} 
+            disabled={isLoading || !stripe || !elements} 
+            onClick={()=>{}}/>
     </form>
   )
 }

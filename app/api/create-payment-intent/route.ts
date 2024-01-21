@@ -19,74 +19,70 @@ const calculateOrderAmount = (items: CartProductType[]) => {
 }
 
 export async function POST(request: Request) {
-    // Vérifie l'utilisateur actuel
-    const currentUser = await getCurrentUser();
+    const currentUser = await getCurrentUser()
 
     if (!currentUser) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Récupère les données du corps de la requête
     const body = await request.json();
     const { items, payment_intent_id } = body;
-    const total = calculateOrderAmount(items) * 100;
-
-    // Prépare les données de la commande
+    const total = calculateOrderAmount(items) * 100
     const orderData = {
-        user: { connect: { id: currentUser.id } },
-        amount: total,
-        currency: 'eur',
-        status: 'pending',
-        deliveryStatus: 'pending',
-        paymentIntentId: payment_intent_id,
-        products: items,
-    };
+        user: {connect:{id:currentUser.id}},
+        amount:total,
+        currency:'eur',
+        status:'pending',
+        deliveryStatus:'pending',
+        paymentIntentId:payment_intent_id,
+        products:items
+    }
 
-    if (payment_intent_id) {
-        // Si un identifiant de paiement est fourni, met à jour le paiement intent
-        const current_intent = await stripe.paymentIntents.retrieve(payment_intent_id);
+    if(payment_intent_id){
 
-        if (current_intent) {
+        const current_intent =await stripe.paymentIntents.retrieve(payment_intent_id)
+        if(current_intent){
             const updated_intent = await stripe.paymentIntents.update(
-                payment_intent_id, { amount: total }
-            );
+                payment_intent_id,{amount:total}
+            )
+        
 
-            // Met à jour la commande correspondante dans la base de données
-            const [existing_order, update_order] = await Promise.all([
-                prisma.order.findFirst({
-                    where: { paymentIntentId: payment_intent_id }
-                }),
-                prisma.order.update({
-                    where: { paymentIntentId: payment_intent_id },
-                    data: {
-                        amount: total,
-                        products: items,
-                    },
-                }),
-            ]);
+        const [existing_order, update_order] = await Promise.all([
+            prisma.order.findFirst({
+                where:{paymentIntentId:payment_intent_id}   
+            }),
+            prisma.order.update({
+                where:{paymentIntentId:payment_intent_id},
+                data:{
+                    amount:total,
+                    products:items
+                }
+            })
+        ])
 
-            if (!existing_order) {
-                return NextResponse.json({ error: 'Invalid payment Intent' }, { status: 400 });
-            }
-
-            return NextResponse.json({ paymentIntent: updated_intent });
+        if(!existing_order){
+            return NextResponse.json({error:'Invalid payment Intent'},
+            {status:400})
         }
-    } else {
-        // Si aucun identifiant de paiement n'est fourni, crée un nouveau paiement intent
+        return NextResponse.json({paymentIntent: updated_intent});
+    }
+
+    }else{
+
         const paymentIntent = await stripe.paymentIntents.create({
             amount: total,
             currency: 'eur',
-            automatic_payment_methods: { enabled: true },
+            automatic_payment_methods:{enabled:true}
         });
-
-        // Associe l'identifiant du paiement intent à la commande
-        orderData.paymentIntentId = paymentIntent.id;
-
-        // Crée une nouvelle commande dans la base de données
+    
+        orderData.paymentIntentId = paymentIntent.id
+    
         await prisma.order.create({
             data: orderData,
-        });
-
+        })
         return NextResponse.json({ paymentIntent });
+    
+
+
     }
 }

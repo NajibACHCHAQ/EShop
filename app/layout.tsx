@@ -24,13 +24,13 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
 
-  //const notify = () => toast('Voici votre toast.');
+  const notify = () => toast('Voici votre toast.');
   return (
     <html lang="fr">
       <body className={`${poppins.className} text-slate-700`}>
-        {/* <Toaster toastOptions={{
+         <Toaster toastOptions={{
           style:{background:'rgb(51 65 85',color:"#fff",}
-        }}/> */}
+        }}/> 
         
         <CartProvider>
         <div className='flex flex-col min-h-screen'>
