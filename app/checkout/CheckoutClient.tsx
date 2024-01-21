@@ -50,13 +50,19 @@ export const CheckoutClient = () => {
             })
         }
     },[cartProducts, paymentIntent])
-    const options:StripeElementsOptions = {
-        clientSecret,
-        appearance:{
-            theme:'stripe',
-            labels:'floating'
+    const [options, setOptions] = useState<StripeElementsOptions | null>(null);
+
+    useEffect(() => {
+        if (clientSecret) {
+            setOptions({
+                clientSecret,
+                appearance: {
+                    theme: 'stripe',
+                    labels: 'floating',
+                },
+            });
         }
-    }
+    }, [clientSecret]);
 
     const handleSetPaymentSuccess = useCallback((value:boolean)=>{
         setPaymentSuccess(value)
@@ -64,11 +70,11 @@ export const CheckoutClient = () => {
 
   return (
     <div className='w-full'>
-        {clientSecret && cartProducts &&(
+    {clientSecret && cartProducts && options && (
         <Elements options={options} stripe={stripePromise}>
-          <CheckoutForm clientSecret={clientSecret} handleSetPaymentSuccess={handleSetPaymentSuccess}/>
+            <CheckoutForm clientSecret={clientSecret} handleSetPaymentSuccess={handleSetPaymentSuccess} />
         </Elements>
-      )}
+    )}
       {loading && <div className='text-center'>Chargement en cours...</div>}
       {error && <div className='text-center text-rose-500'>Une erreur s'est produite</div>}
       {paymentSuccess && (

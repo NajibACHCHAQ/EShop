@@ -1,11 +1,13 @@
+import { getCurrentUser } from "@/actions/GetCurrentUser";
 import { Container } from "../components/Container";
 import { CartClient } from "./CartClient";
 
-export default function Cart() {
+export default async function Cart() {
+    const currentUser = await getCurrentUser()
     return(
         <div className="pt-8 ">
             <Container>
-                <CartClient/>
+                <CartClient currentUser={currentUser}/>
             </Container>
         </div>
     )
