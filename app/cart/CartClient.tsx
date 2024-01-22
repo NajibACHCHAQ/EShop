@@ -85,7 +85,7 @@ export const CartClient:React.FC<CartClientProps> = ({currentUser}) => {
                             }}
                             disabled={buttonClicked}
                             />
-
+                            <a href="/checkout">{currentUser ? 'Commander' : 'Se connecter pour commander'}</a>
                     
                     <Link href={"/"} className='text-slate-500 flex items-center gap-1 mt-2'>
                     <FaArrowRight />
