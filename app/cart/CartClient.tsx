@@ -72,14 +72,14 @@ export const CartClient:React.FC<CartClientProps> = ({currentUser}) => {
                         </div>
                         <p className='taxt-slate-500 mx-auto'>Frais et expédition</p>
 
-                           <a href="/checkout"> <button className='flex justify-center items-center h-[fit-content] p-4 bg-cyan-900 w-[200px] text-white rounded-md mr-auto ml-auto' onClick={() => {
+                           <a href="/checkout"> <button className='flex justify-center items-center h-[fit-content] p-4 bg-cyan-900 w-[200px] text-white rounded-md mr-auto ml-auto font-bold text-[20px] hover:bg-cyan-800' onClick={() => {
                                 if (!buttonClicked) {
                                 setButtonClicked(true);
                                 }}}disabled={buttonClicked}>{currentUser ? 'Commander' : 'Se connecter pour commander'} </button></a>
                     
-                    <Link href={"/"} className='text-slate-500 flex items-center gap-1 mt-2'>
-                    <FaArrowRight />
-                    <span>Continuer votre visite</span>
+                            <Link href={"/"} className='text-slate-500 flex items-center gap-1 mt-2'>
+                            <FaArrowRight />
+                            <span>Continuer votre visite</span>
                     
                     </Link>
                     
