@@ -72,20 +72,10 @@ export const CartClient:React.FC<CartClientProps> = ({currentUser}) => {
                         </div>
                         <p className='taxt-slate-500 mx-auto'>Frais et expédition</p>
 
-
-
-                        <Button
-                            label={currentUser ? 'Commander' : 'Se connecter pour commander'}
-                            outline={currentUser ? false : true}
-                            onClick={() => {
+                           <a href="/checkout"> <button className='flex justify-center items-center h-[fit-content] p-4 bg-cyan-900 w-[200px] text-white rounded-md mr-auto ml-auto' onClick={() => {
                                 if (!buttonClicked) {
                                 setButtonClicked(true);
-                                currentUser ? router.push('/checkout') : router.push('/login');
-                                }
-                            }}
-                            disabled={buttonClicked}
-                            />
-                            <a href="/checkout">{currentUser ? 'Commander' : 'Se connecter pour commander'}</a>
+                                }}}disabled={buttonClicked}>{currentUser ? 'Commander' : 'Se connecter pour commander'} </button></a>
                     
                     <Link href={"/"} className='text-slate-500 flex items-center gap-1 mt-2'>
                     <FaArrowRight />
