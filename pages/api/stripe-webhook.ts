@@ -46,7 +46,7 @@ export default async function Handler(
                 console.log("Updating order for payment_intent:", charge.payment_intent);
                 await prisma?.order.update({
                     where: { paymentIntentId: charge.payment_intent },
-                    data: { status: "complete", address: charge.shipping.adress },
+                    data: { status: "complete", adress: charge.shipping.adress },
                 });
                 console.log("Order updated successfully");
             }

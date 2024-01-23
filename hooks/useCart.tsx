@@ -63,7 +63,7 @@ export const CartContextProvider = (props:Props)=>{
             localStorage.setItem('eShopCartItems', JSON.stringify(updatedCart))
             return updatedCart
         });
-    },[])
+    },[cartProducts])
 
     useEffect(() => {
         // La fonction getTotals est appelée à chaque changement dans cartProducts

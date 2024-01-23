@@ -24,7 +24,6 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
 
-  const notify = () => toast('Voici votre toast.');
   return (
     <html lang="fr">
       <body className={`${poppins.className} text-slate-700`}>
