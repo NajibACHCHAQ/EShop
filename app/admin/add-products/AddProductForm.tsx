@@ -3,6 +3,7 @@ import { getCurrentUser } from '@/actions/GetCurrentUser'
 import { Container } from '@/app/components/Container'
 import { FormWrap } from '@/app/components/FormWrap'
 import { Heading } from '@/app/components/Heading'
+import { CustomCheckbox } from '@/app/components/inputs/CustomCheckbox'
 import { Input } from '@/app/components/inputs/Input'
 import { TextArea } from '@/app/components/inputs/TextArea'
 import { register } from 'module'
@@ -57,6 +58,18 @@ export const AddProductForm =  () => {
                 register={register}
                 errors={errors} 
                 required/>
+
+            <CustomCheckbox
+             id="inStock"
+             label='Description'           
+             register={register} 
+             />
+             <div className='w-full font-medium'>
+                <div className='mb-2 font-semibold'>Choisir une catégorie</div>
+                <div className='grid grid-cols-2 md:grid-cols-3 max-[50vh] overflow-auto'>
+                    {}
+                </div>
+             </div>
             
             
         </>
