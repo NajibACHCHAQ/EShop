@@ -1,5 +1,6 @@
 'use client'
 import { getCurrentUser } from '@/actions/GetCurrentUser'
+import { Button } from '@/app/components/Button'
 import { Container } from '@/app/components/Container'
 import { FormWrap } from '@/app/components/FormWrap'
 import { Heading } from '@/app/components/Heading'
@@ -12,8 +13,8 @@ import { categories } from '@/utils/Categories'
 import { colors } from '@/utils/Colors'
 import { register } from 'module'
 
-import React, { useState } from 'react'
-import { FieldValues, useForm } from 'react-hook-form'
+import React, { useCallback, useEffect, useState } from 'react'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 
 export type ImageType ={
     color:string;
@@ -28,6 +29,10 @@ export type UploadedImageType ={
 
 export const AddProductForm =  () => {
     const [isLoading, setIsLoading] = useState(false)
+    const [images, setImages] = useState<ImageType[] | null>()
+    const [isProductCreated, setIsProductCreated] = useState(false)
+
+
     const {register, handleSubmit, setValue, watch, reset,formState:{errors}} = useForm<FieldValues>({
         defaultValues:{
             name:'',
@@ -41,6 +46,22 @@ export const AddProductForm =  () => {
 
         }
     })
+    useEffect(()=>{
+        setCustomValue('images', images)
+    },[images])
+
+    useEffect(()=>{
+        if(isProductCreated){
+            reset();
+            setImages(null);
+            setIsProductCreated(false)
+        }
+    },[isProductCreated])
+
+    const onSubmit: SubmitHandler<FieldValues> = async(data) =>{
+        console.log('Product Data',data )
+    }
+
     const category = watch("category")
     const setCustomValue = (id:string, value:any) =>{
         setValue(id, value,{
@@ -49,6 +70,27 @@ export const AddProductForm =  () => {
             shouldTouch:true
         })
     }
+
+    const addImageToState = useCallback((value:ImageType)=>{
+        setImages((prev)=>{
+            if(!prev){
+                return [value]
+            }
+            return [...prev, value]
+        })
+    },[])
+    const removeImageFromState = useCallback((value:ImageType)=>{
+        setImages((prev)=>{
+            if(prev){
+                const filteredImages = prev.filter((item) => item.color !== value.color)
+                return filteredImages;
+            }
+
+
+            return prev
+        })
+    },[])
+
     return(
         <>
             <Heading title='Ajouter un Produit' center></Heading>
@@ -116,15 +158,15 @@ export const AddProductForm =  () => {
                 <div className='grid grid-cols-2 gap-3'>
                     {colors.map((item,index)=>{
                         return <SelectColor key={index} item={item} 
-                                            addImageToState={()=>{}} 
-                                            removeImageFromState={()=>{}}
-                                            isProductCreated={false}
+                                            addImageToState={addImageToState} 
+                                            removeImageFromState={removeImageFromState}
+                                            isProductCreated={isProductCreated}
                                 />
                     })}
                 </div>
              </div>
             
-            
+            <Button label={isLoading ? 'Chargement...': 'Valider'} onClick={handleSubmit(onSubmit)}/>
         </>
     )
 }
