@@ -3,9 +3,11 @@ import { getCurrentUser } from '@/actions/GetCurrentUser'
 import { Container } from '@/app/components/Container'
 import { FormWrap } from '@/app/components/FormWrap'
 import { Heading } from '@/app/components/Heading'
+import { CategoryInput } from '@/app/components/inputs/CategoryInput'
 import { CustomCheckbox } from '@/app/components/inputs/CustomCheckbox'
 import { Input } from '@/app/components/inputs/Input'
 import { TextArea } from '@/app/components/inputs/TextArea'
+import { categories } from '@/utils/Categories'
 import { register } from 'module'
 
 import React, { useState } from 'react'
@@ -26,6 +28,14 @@ export const AddProductForm =  () => {
 
         }
     })
+    const category = watch("category")
+    const setCustomValue = (id:string, value:any) =>{
+        setValue(id, value,{
+            shouldValidate:true,
+            shouldDirty:true,
+            shouldTouch:true
+        })
+    }
     return(
         <>
             <Heading title='Ajouter un Produit' center></Heading>
@@ -66,8 +76,19 @@ export const AddProductForm =  () => {
              />
              <div className='w-full font-medium'>
                 <div className='mb-2 font-semibold'>Choisir une catégorie</div>
-                <div className='grid grid-cols-2 md:grid-cols-3 max-[50vh] overflow-auto'>
-                    {}
+                <div className='grid grid-cols-2 md:grid-cols-3 max-[50vh] overflow-y-auto'>
+                    {categories.map((item)=>{
+                       if(item.label === 'All') {
+                        return null;
+                       }
+
+                       return <div key={item.label} className='col-span'>
+                            <CategoryInput onClick={(category)=> setCustomValue('category',category)}
+                            selected={category === item.label}
+                            label={item.label}
+                            icon = {item.icon}/>
+                       </div>
+                    })}
                 </div>
              </div>
             
