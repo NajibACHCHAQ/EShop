@@ -7,6 +7,7 @@ export const products = [
     brand: "apple",
     category: "Phone",
     inStock: true,
+    stockQty:10,
     images: [
       {
         color: "White",
@@ -32,6 +33,7 @@ export const products = [
     brand: "logitech",
     category: "Accesories",
     inStock: true,
+    stockQty:10,
     images: [
       {
         color: "Black",
@@ -72,6 +74,7 @@ export const products = [
     brand: "Apple",
     category: "Phone",
     inStock: true,
+    stockQty:10,
     images: [
       {
         color: "Black",
