@@ -8,10 +8,22 @@ import { CustomCheckbox } from '@/app/components/inputs/CustomCheckbox'
 import { Input } from '@/app/components/inputs/Input'
 import { TextArea } from '@/app/components/inputs/TextArea'
 import { categories } from '@/utils/Categories'
+import { colors } from '@/utils/Colors'
 import { register } from 'module'
 
 import React, { useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
+
+export type ImageType ={
+    color:string;
+    colorCode:string;
+    image: File | null
+}
+export type UploadedImageType ={
+    color:string;
+    colorCode:string;
+    image: string;
+}
 
 export const AddProductForm =  () => {
     const [isLoading, setIsLoading] = useState(false)
@@ -71,12 +83,12 @@ export const AddProductForm =  () => {
 
             <CustomCheckbox
              id="inStock"
-             label='Description'           
+             label='En stock'           
              register={register} 
              />
              <div className='w-full font-medium'>
                 <div className='mb-2 font-semibold'>Choisir une catégorie</div>
-                <div className='grid grid-cols-2 md:grid-cols-3 max-[50vh] overflow-y-auto'>
+                <div className='grid grid-cols-2 md:grid-cols-3 gap-3 max-[50vh] overflow-y-auto'>
                     {categories.map((item)=>{
                        if(item.label === 'All') {
                         return null;
@@ -88,6 +100,21 @@ export const AddProductForm =  () => {
                             label={item.label}
                             icon = {item.icon}/>
                        </div>
+                    })}
+                </div>
+             </div>
+             <div className='w-full flex flex-col flex-wrap gap-4'>
+                <div>
+                    <div className='font-bold'>
+                        Selectionnez couleurs et images
+                    </div>
+                    <div className='text-sm'>
+                        Vous devez selectionnez une image pour chaque couleur de produit
+                    </div>
+                </div>
+                <div className='grid grid-cols-2 gap-3'>
+                    {colors.map((item,index)=>{
+                        return <></>
                     })}
                 </div>
              </div>

@@ -21,7 +21,7 @@ export const TextArea:React.FC<TextAreaProps> = (
 }
 ) => {
   return (
-    <div className='w-[70%] relative'>
+    <div className='w-[95%] relative'>
         <textarea
         id={id}
         disabled={disabled}
