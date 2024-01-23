@@ -1,20 +1,18 @@
 'use client'
-import { getCurrentUser } from '@/actions/GetCurrentUser'
 import { Button } from '@/app/components/Button'
-import { Container } from '@/app/components/Container'
-import { FormWrap } from '@/app/components/FormWrap'
 import { Heading } from '@/app/components/Heading'
 import { CategoryInput } from '@/app/components/inputs/CategoryInput'
 import { CustomCheckbox } from '@/app/components/inputs/CustomCheckbox'
 import { Input } from '@/app/components/inputs/Input'
 import { SelectColor } from '@/app/components/inputs/SelectColor'
 import { TextArea } from '@/app/components/inputs/TextArea'
+import firebaseApp from '@/libs/firebase'
 import { categories } from '@/utils/Categories'
 import { colors } from '@/utils/Colors'
-import { register } from 'module'
-
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import React, { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
 export type ImageType ={
     color:string;
@@ -60,6 +58,76 @@ export const AddProductForm =  () => {
 
     const onSubmit: SubmitHandler<FieldValues> = async(data) =>{
         console.log('Product Data',data )
+
+
+        setIsLoading(true)
+        let uploadedImages:UploadedImageType[] = []
+
+        if(!data.category){
+            setIsLoading(false)
+            return toast.error('Aucune catégorie selectionné')
+        }
+
+        if(!data.images || data.images.lenght === 0){
+            setIsLoading(false)
+            return toast.error('Aucune image selectionné')
+        }
+        const handleImageUploads = async ()=>{
+            toast('Création du produit en cours...')
+            try{
+                for(const item of data.images){
+                    if(item.image){
+                        const fileName = new Date().getTime() + '-' + item.image.name;
+                        const storage = getStorage(firebaseApp)
+                        const storageRef = ref(storage, `product/${fileName}`)
+                        const uploadTask = uploadBytesResumable(storageRef, item.image);
+
+                        await new Promise<void>((resolve,reject)=>{
+                            uploadTask.on(
+                                'state_changed',
+                                (snapshot)=>{
+                                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes)*100;
+                                    console.log('Upload is '+ progress + '% done');
+                                    switch(snapshot.state){
+                                        case 'paused':
+                                            console.log('Upload is paused');
+                                            break;
+                                        case 'running':
+                                            console.log('Upload is running');
+                                            break;
+                                    }
+                                },
+                                (error)=>{
+                                    console.log('error upload image', error);
+                                    
+                                    reject(error)
+                                },
+                                ()=>{
+                                    getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl)=>{
+                                        uploadedImages.push({
+                                            ...item,
+                                            image: downloadUrl
+                                        })
+                                        console.log('File available at', downloadUrl)
+                                        resolve()
+                                    }).catch((error)=>{
+                                        console.log('Error getting the downoload URL', error)
+                                        reject(error)
+                                    })
+                                }
+                            )
+                        })
+                    }
+                }
+            }catch(error){
+                setIsLoading(false)
+                console.log('Error handling image uploads', error)
+                return toast.error('Error handling image uploads')
+            }
+        }
+        await handleImageUploads();
+        const productData = {...data,images:uploadedImages}
+        console.log("productData", productData)
     }
 
     const category = watch("category")
