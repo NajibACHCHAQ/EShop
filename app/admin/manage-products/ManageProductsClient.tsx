@@ -65,9 +65,9 @@ console.log('Données récupérées depuis la base de données :', products);
     ]
 
     const handleToggleStock = useCallback((id:string,inStock:boolean)=>{
-        axios.put('/api/producs',{
+        axios.put('/api/product',{
             id,
-            inStock:!inStock
+            inStock: !inStock
         }).then((res)=>{
             toast.success('Status du produit changé')
             router.refresh();
