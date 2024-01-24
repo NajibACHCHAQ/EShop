@@ -11,6 +11,8 @@ import { ActionBtn } from '@/app/components/ActionBtn'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
+import { deleteObject, getStorage, ref } from 'firebase/storage'
+import firebaseApp from '@/libs/firebase'
 
 interface ManageProductsClientProps{
     products:Product[]
@@ -22,6 +24,7 @@ console.log('Données récupérées depuis la base de données :', products);
 
     console.log('Données récupérées depuis la base de données :', products);
     const router = useRouter()
+    const storage = getStorage(firebaseApp)
 
     let rows:any =[]
     if(products){
@@ -55,7 +58,7 @@ console.log('Données récupérées depuis la base de données :', products);
         {field: 'action',headerName:'Actions', width:200,renderCell:(params)=>{
             return(<div className='flex justify-between gap-4 w-full' >
                 <ActionBtn icon={MdCached} onClick={()=>{handleToggleStock(params.row.id, params.row.inStock)}} />
-                <ActionBtn icon={MdDelete} onClick={()=>{}} />
+                <ActionBtn icon={MdDelete} onClick={()=>{handleDelete(params.row.id, params.row.images)}} />
                 <ActionBtn icon={MdRemoveRedEye} onClick={()=>{}} />
                 
                 </div>
@@ -75,6 +78,35 @@ console.log('Données récupérées depuis la base de données :', products);
             toast.error('Oops! Somethings went wrong')
             console.log(err)
         })
+    },[])
+    const handleDelete = useCallback(async(id:string,images:any)=>{
+        toast('Suppression du produit...')
+        const handleImageDelete = async ()=>{
+            try{
+                for(const item of images){
+                    if(item.image){
+                       const imageRef = ref(storage, item.image)
+                       await deleteObject(imageRef)
+                       console.log('image supprimmée',item.image)
+                    }
+                }
+            }catch(error){
+                return console.log("Erreur lors de la suppression de l'image",error)
+            }
+        }
+
+        await handleImageDelete()
+
+        axios.delete(`/api/product/${id}`).then(
+            (res)=>{
+                toast.success('produit supprimé')
+                router.refresh()
+            }
+        ).catch((err)=>{
+            toast.error('Erreur lors de la suppression du produit')
+            console.log(err)
+        })
+        
     },[])
 
   return (
