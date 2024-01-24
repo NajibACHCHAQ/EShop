@@ -9,7 +9,9 @@ import { TextArea } from '@/app/components/inputs/TextArea'
 import firebaseApp from '@/libs/firebase'
 import { categories } from '@/utils/Categories'
 import { colors } from '@/utils/Colors'
+import axios from 'axios'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
+import { useRouter } from 'next/navigation'
 import React, { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -29,6 +31,7 @@ export const AddProductForm =  () => {
     const [isLoading, setIsLoading] = useState(false)
     const [images, setImages] = useState<ImageType[] | null>()
     const [isProductCreated, setIsProductCreated] = useState(false)
+    const router = useRouter()
 
 
     const {register, handleSubmit, setValue, watch, reset,formState:{errors}} = useForm<FieldValues>({
@@ -128,6 +131,17 @@ export const AddProductForm =  () => {
         await handleImageUploads();
         const productData = {...data,images:uploadedImages}
         console.log("productData", productData)
+
+        axios.post('/api/product',productData).then(()=>{
+            toast.success('Produit ajouté')
+            setIsProductCreated(true)
+            router.refresh();
+
+        }).catch((error)=>{
+            toast.error("Une erreur est survenue lors de l'enregistrement du produit")
+        }).finally(()=>{
+            setIsLoading(false)
+        })
     }
 
     const category = watch("category")
