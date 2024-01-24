@@ -59,7 +59,9 @@ console.log('Données récupérées depuis la base de données :', products);
             return(<div className='flex justify-between gap-4 w-full' >
                 <ActionBtn icon={MdCached} onClick={()=>{handleToggleStock(params.row.id, params.row.inStock)}} />
                 <ActionBtn icon={MdDelete} onClick={()=>{handleDelete(params.row.id, params.row.images)}} />
-                <ActionBtn icon={MdRemoveRedEye} onClick={()=>{}} />
+                <ActionBtn icon={MdRemoveRedEye} onClick={()=>{
+                    router.push(`product/${params.row.id}`)
+                }} />
                 
                 </div>
                 
