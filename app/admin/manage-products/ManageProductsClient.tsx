@@ -7,7 +7,8 @@ import { formatPrice } from '@/utils/formatPrice'
 import { dividerClasses } from '@mui/material'
 import { Heading } from '@/app/components/Heading'
 import { Status } from '@/app/components/Status'
-import { MdClose, MdDone } from 'react-icons/md'
+import { MdCached, MdClose, MdDelete, MdDone, MdRemoveRedEye } from 'react-icons/md'
+import { ActionBtn } from '@/app/components/ActionBtn'
 
 interface ManageProductsClientProps{
     products:Product[]
@@ -42,14 +43,21 @@ console.log('Données récupérées depuis la base de données :', products);
         }},
         {field: 'category',headerName:'Category', width:100},
         {field: 'brand',headerName:'Brand', width:100},
-        {field: 'inStock',headerName:'InStock', width:120,renderCell:(params)=>{
+        {field: 'inStock',headerName:'InStock', width:130,renderCell:(params)=>{
             return(<div >{params.row.inStock === true ? (
             <Status text='en stock' icon={MdDone} bg="bg-teal-200" color='text-teal-700'/>
             ) : (
-            <Status text='rupture de stock' icon={MdClose} bg='bg-rose-200' color='text-rose-700'/>) }</div>)
+            <Status text='rupture' icon={MdClose} bg='bg-rose-200' color='text-rose-700'/>) }</div>)
         }},
         {field: 'action',headerName:'Actions', width:200,renderCell:(params)=>{
-            return(<div>Action</div>)
+            return(<div className='flex justify-between gap-4 w-full' >
+                <ActionBtn icon={MdCached} onClick={()=>{}} />
+                <ActionBtn icon={MdDelete} onClick={()=>{}} />
+                <ActionBtn icon={MdRemoveRedEye} onClick={()=>{}} />
+                
+                </div>
+                
+                )
         }}
     ]
 
