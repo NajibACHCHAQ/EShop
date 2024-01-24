@@ -1,14 +1,16 @@
 'use client'
 
 import { Product } from '@prisma/client'
-import React from 'react'
+import React, { useCallback } from 'react'
 import {DataGrid, GridColDef} from '@mui/x-data-grid'
 import { formatPrice } from '@/utils/formatPrice'
-import { dividerClasses } from '@mui/material'
 import { Heading } from '@/app/components/Heading'
 import { Status } from '@/app/components/Status'
 import { MdCached, MdClose, MdDelete, MdDone, MdRemoveRedEye } from 'react-icons/md'
 import { ActionBtn } from '@/app/components/ActionBtn'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
 
 interface ManageProductsClientProps{
     products:Product[]
@@ -19,6 +21,7 @@ export const ManageProductsClient:React.FC<ManageProductsClientProps> = ({produc
 console.log('Données récupérées depuis la base de données :', products);
 
     console.log('Données récupérées depuis la base de données :', products);
+    const router = useRouter()
 
     let rows:any =[]
     if(products){
@@ -51,7 +54,7 @@ console.log('Données récupérées depuis la base de données :', products);
         }},
         {field: 'action',headerName:'Actions', width:200,renderCell:(params)=>{
             return(<div className='flex justify-between gap-4 w-full' >
-                <ActionBtn icon={MdCached} onClick={()=>{}} />
+                <ActionBtn icon={MdCached} onClick={()=>{handleToggleStock(params.row.id, params.row.inStock)}} />
                 <ActionBtn icon={MdDelete} onClick={()=>{}} />
                 <ActionBtn icon={MdRemoveRedEye} onClick={()=>{}} />
                 
@@ -60,6 +63,19 @@ console.log('Données récupérées depuis la base de données :', products);
                 )
         }}
     ]
+
+    const handleToggleStock = useCallback((id:string,inStock:boolean)=>{
+        axios.put('/api/producs',{
+            id,
+            inStock:!inStock
+        }).then((res)=>{
+            toast.success('Status du produit changé')
+            router.refresh();
+        }).catch((err)=>{
+            toast.error('Oops! Somethings went wrong')
+            console.log(err)
+        })
+    },[])
 
   return (
     <div className='max-w-[1450px] m-auto text-xl'>
@@ -77,6 +93,7 @@ console.log('Données récupérées depuis la base de données :', products);
             }}
             pageSizeOptions={[5, 10]}
             checkboxSelection
+            disableRowSelectionOnClick
             />
         </div>
     </div>
