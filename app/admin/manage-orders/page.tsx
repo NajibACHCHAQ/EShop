@@ -1,10 +1,25 @@
-
 import React from 'react'
+import { ManageOrdersClient } from './ManageOrdersClient'
+import { Container } from '@/app/components/Container'
+import getProducts from '@/actions/GetProducts'
+import { getCurrentUser } from '@/actions/GetCurrentUser'
+import NullData from '@/app/components/NullData'
 
-const ManageOrder = () => {
+const ManageOrders = async () => {
+  const products = await getProducts({category:null})
+  const currentUser = await getCurrentUser()
+
+  if(!currentUser || currentUser.role !== 'ADMIN'){
+    return <NullData title="Oops vous n'avez pas acces"/>
+}
   return (
-    <div>ManageOrder</div>
+    <div>
+      <Container>
+      <ManageOrdersClient products ={products}/>
+      </Container>
+      
+    </div>
   )
 }
 
-export default ManageOrder
+export default ManageOrders
