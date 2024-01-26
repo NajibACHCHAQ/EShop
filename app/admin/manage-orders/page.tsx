@@ -1,12 +1,12 @@
 import React from 'react'
 import { ManageOrdersClient } from './ManageOrdersClient'
 import { Container } from '@/app/components/Container'
-import getProducts from '@/actions/GetProducts'
 import { getCurrentUser } from '@/actions/GetCurrentUser'
 import NullData from '@/app/components/NullData'
+import getOrders from '@/actions/GetOrders'
 
 const ManageOrders = async () => {
-  const products = await getProducts({category:null})
+  const orders = await getOrders()
   const currentUser = await getCurrentUser()
 
   if(!currentUser || currentUser.role !== 'ADMIN'){
@@ -15,7 +15,7 @@ const ManageOrders = async () => {
   return (
     <div>
       <Container>
-      <ManageOrdersClient products ={products}/>
+      <ManageOrdersClient orders ={orders}/>
       </Container>
       
     </div>
