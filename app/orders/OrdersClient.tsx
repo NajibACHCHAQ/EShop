@@ -79,8 +79,6 @@ export const OrdersClient:React.FC<OrdersClientProps> = ({orders}) => {
         
         {field: 'action',headerName:'Actions', width:200,renderCell:(params)=>{
             return(<div className='flex justify-between gap-4 w-full' >
-                <ActionBtn icon={MdDeliveryDining} onClick={()=>{handleDispatch(params.row.id)}} />
-                <ActionBtn icon={MdDone} onClick={()=>{handleDeliver(params.row.id)}} />
                 <ActionBtn icon={MdRemoveRedEye} onClick={()=>{
                     router.push(`/order/${params.row.id}`);
                 }} />
@@ -91,37 +89,13 @@ export const OrdersClient:React.FC<OrdersClientProps> = ({orders}) => {
         }}
     ]
 
-    const handleDispatch = useCallback((id:string)=>{
-        axios.put('/api/order',{
-            id,
-            deliveryStatus: 'dispatched'
-        }).then((res)=>{
-            toast.success('Commande envoyé')
-            router.refresh();
-        }).catch((err)=>{
-            toast.error('Oops! Somethings went wrong')
-            console.log(err)
-        })
-    },[])
 
-    const handleDeliver = useCallback((id:string)=>{
-        axios.put('/api/order',{
-            id,
-            deliveryStatus: 'delivered'
-        }).then((res)=>{
-            toast.success('Commande livrée')
-            router.refresh();
-        }).catch((err)=>{
-            toast.error('Oops! Somethings went wrong')
-            console.log(err)
-        })
-    },[])
     
 
   return (
-    <div className='max-w-[1450px] m-auto text-xl'>
+    <div className='max-w-[1050px] m-auto text-xl'>
         <div className='mb-4 mt-8'>
-            <Heading title='Gestion des commandes' center/>
+            <Heading title='Mes commandes' center/>
         </div>
         <div style={{height:600, width:'100%'}}>
         <DataGrid

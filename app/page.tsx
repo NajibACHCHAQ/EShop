@@ -3,8 +3,20 @@ import { Container } from "./components/Container";
 import { HomeBanner } from "./components/HomeBanner";
 import { truncateText } from "@/utils/truncateText";
 import { ProductCard } from "./components/products/ProductCard";
+import getProducts, { IProductParams } from "@/actions/GetProducts";
+import NullData from "./components/NullData";
 
-export default function Home() {
+interface HomeProps{
+  searchParams:IProductParams
+}
+
+export default async function Home({searchParams}:HomeProps) {
+  const products = await getProducts(searchParams)
+
+  if(products.length === 0){
+    return <NullData title='Aucun produit trouvé'/>
+  }
+
   return (
     <div className="p-8">
       <Container>

@@ -8,7 +8,9 @@ export async function PUT(request:Request) {
 
     const currentUser = await getCurrentUser()
 
-    if(!currentUser || currentUser.role !== 'ADMIN'){
+    if(!currentUser) return NextResponse
+
+    if(currentUser.role !== 'ADMIN'){
         return NextResponse.error()
     }
     const body = await request.json()

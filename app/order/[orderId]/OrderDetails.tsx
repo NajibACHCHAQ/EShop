@@ -28,14 +28,14 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
       <div>
         {order.status === 'pending' ? (
           <Status
-            text='pending'
+            text='En attente'
             icon={MdAccessTimeFilled}
             bg='bg-slate-200'
             color='text-slate-700'
           />
             ) : order.status === 'complete' ? (
             <Status 
-            text='completed' 
+            text='Validé' 
             icon={MdDone} 
             bg='bg-green-200' 
             color='text-green-700' />
@@ -49,14 +49,14 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
       <div>{
       order.deliveryStatus === 'pending' ? (
             <Status
-                text='pending'
+                text='En attente'
                 icon={MdAccessTimeFilled}
                 bg='bg-slate-200'
                 color='text-slate-700'
             />
         ) : order.deliveryStatus === 'dispatched' ? (
             <Status 
-                text='completed' 
+                text='En cours' 
                 icon={MdDeliveryDining} 
                 bg='bg-purple-200' 
                 color='text-purple-700' />
