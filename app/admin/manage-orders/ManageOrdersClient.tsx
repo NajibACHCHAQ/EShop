@@ -82,7 +82,7 @@ export const ManageOrdersClient:React.FC<ManageOrdersClientProps> = ({orders}) =
                 <ActionBtn icon={MdDeliveryDining} onClick={()=>{handleDispatch(params.row.id)}} />
                 <ActionBtn icon={MdDone} onClick={()=>{handleDeliver(params.row.id)}} />
                 <ActionBtn icon={MdRemoveRedEye} onClick={()=>{
-                    router.push(`order/${params.row.id}`)
+                    router.push(`/order/${params.row.id}`);
                 }} />
                 
                 </div>
