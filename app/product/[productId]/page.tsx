@@ -2,15 +2,15 @@ import { Container } from "@/app/components/Container";
 import { ProductDetails } from "./ProductDetails";
 import { ListRating } from "../ListRating";
 import { products } from "@/utils/products";
+import getProductById from "@/actions/GetProductById";
 
 interface IParams{
     productId?:string
 }
 
-export default function Product({params} : {params: IParams}) {
-    console.log('params',params);
-
-    const product = products.find((item) => item.id === params.productId)
+export default async function Product({params} : {params: IParams}) {
+    
+    const product = await getProductById(params)
  
     return(
         <div className="p-8">
