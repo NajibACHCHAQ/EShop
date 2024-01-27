@@ -1,17 +1,17 @@
 'use client'
 
-import { Order, Product, User } from '@prisma/client'
+import { Order, User } from '@prisma/client'
 import React, { useCallback } from 'react'
 import {DataGrid, GridColDef} from '@mui/x-data-grid'
 import { formatPrice } from '@/utils/formatPrice'
 import { Heading } from '@/app/components/Heading'
 import { Status } from '@/app/components/Status'
-import { MdAccessTimeFilled, MdCached, MdClose, MdDelete, MdDeliveryDining, MdDone, MdRemoveRedEye } from 'react-icons/md'
+import { MdAccessTimeFilled, MdDeliveryDining, MdDone, MdRemoveRedEye } from 'react-icons/md'
 import { ActionBtn } from '@/app/components/ActionBtn'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
-import { deleteObject, getStorage, ref } from 'firebase/storage'
+import { getStorage } from 'firebase/storage'
 import firebaseApp from '@/libs/firebase'
 import moment from 'moment'
 
@@ -29,8 +29,6 @@ export const ManageOrdersClient:React.FC<ManageOrdersClientProps> = ({orders}) =
     const router = useRouter()
     const storage = getStorage(firebaseApp)
 
-    const handleDeliver = ()=>{}
-    const handleDispatch = ()=>{}
 
 
     let rows:any =[]
@@ -42,7 +40,7 @@ export const ManageOrdersClient:React.FC<ManageOrdersClientProps> = ({orders}) =
                 amount:formatPrice(order.amount / 100),
                 paymentStatus:order.status,
                 date:moment(order.createDate).fromNow(),
-                deliverStatus:order.deliveryStatus,
+                deliveryStatus:order.deliveryStatus,
             }
         })
     }
@@ -55,9 +53,9 @@ export const ManageOrdersClient:React.FC<ManageOrdersClientProps> = ({orders}) =
         }},
         {field: 'paymentStatus',headerName:'Status Paiement', width:130,renderCell:(params)=>{
             return(<div >{params.row.paymentStatus === 'pending' ? (
-            <Status text='pending' icon={MdAccessTimeFilled} bg="bg-slate-200" color='text-slate-700'/>
+            <Status text='en attente' icon={MdAccessTimeFilled} bg="bg-slate-200" color='text-slate-700'/>
             ) : params.row.paymentStatus === 'complete' ? (
-            <Status text='completed' icon={MdDone} bg='bg-purple-200' color='text-purple-700'/>
+            <Status text='validé' icon={MdDone} bg='bg-green-200' color='text-green-700'/>
             ) : (
             <></>
             )  }
@@ -81,8 +79,8 @@ export const ManageOrdersClient:React.FC<ManageOrdersClientProps> = ({orders}) =
         
         {field: 'action',headerName:'Actions', width:200,renderCell:(params)=>{
             return(<div className='flex justify-between gap-4 w-full' >
-                <ActionBtn icon={MdDeliveryDining} onClick={()=>{handleDispatch()}} />
-                <ActionBtn icon={MdDone} onClick={()=>{handleDeliver()}} />
+                <ActionBtn icon={MdDeliveryDining} onClick={()=>{handleDispatch(params.row.id)}} />
+                <ActionBtn icon={MdDone} onClick={()=>{handleDeliver(params.row.id)}} />
                 <ActionBtn icon={MdRemoveRedEye} onClick={()=>{
                     router.push(`order/${params.row.id}`)
                 }} />
@@ -93,52 +91,37 @@ export const ManageOrdersClient:React.FC<ManageOrdersClientProps> = ({orders}) =
         }}
     ]
 
-    const handleToggleStock = useCallback((id:string,inStock:boolean)=>{
-        axios.put('/api/product',{
+    const handleDispatch = useCallback((id:string)=>{
+        axios.put('/api/order',{
             id,
-            inStock: !inStock
+            deliveryStatus: 'dispatched'
         }).then((res)=>{
-            toast.success('Status du produit changé')
+            toast.success('Commande envoyé')
             router.refresh();
         }).catch((err)=>{
             toast.error('Oops! Somethings went wrong')
             console.log(err)
         })
     },[])
-    const handleDelete = useCallback(async(id:string,images:any)=>{
-        toast('Suppression du produit...')
-        const handleImageDelete = async ()=>{
-            try{
-                for(const item of images){
-                    if(item.image){
-                       const imageRef = ref(storage, item.image)
-                       await deleteObject(imageRef)
-                       console.log('image supprimmée',item.image)
-                    }
-                }
-            }catch(error){
-                return console.log("Erreur lors de la suppression de l'image",error)
-            }
-        }
 
-        await handleImageDelete()
-
-        axios.delete(`/api/product/${id}`).then(
-            (res)=>{
-                toast.success('produit supprimé')
-                router.refresh()
-            }
-        ).catch((err)=>{
-            toast.error('Erreur lors de la suppression du produit')
+    const handleDeliver = useCallback((id:string)=>{
+        axios.put('/api/order',{
+            id,
+            deliveryStatus: 'delivered'
+        }).then((res)=>{
+            toast.success('Commande livrée')
+            router.refresh();
+        }).catch((err)=>{
+            toast.error('Oops! Somethings went wrong')
             console.log(err)
         })
-        
     },[])
+    
 
   return (
     <div className='max-w-[1450px] m-auto text-xl'>
         <div className='mb-4 mt-8'>
-            <Heading title='Manage Products' center/>
+            <Heading title='Gestion des commandes' center/>
         </div>
         <div style={{height:600, width:'100%'}}>
         <DataGrid

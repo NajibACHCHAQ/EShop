@@ -114,7 +114,7 @@ console.log('Données récupérées depuis la base de données :', products);
   return (
     <div className='max-w-[1450px] m-auto text-xl'>
         <div className='mb-4 mt-8'>
-            <Heading title='Manage Products' center/>
+            <Heading title='Gestion produits' center/>
         </div>
         <div style={{height:600, width:'100%'}}>
         <DataGrid
