@@ -71,6 +71,17 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
         )}
       </div>
       </div>
+      <div className='flex gap-2 items-center'>
+      <div>
+    {order.adress ? (
+    <>
+      {order.adress.line1}, {order.adress.line2}, {order.adress.city}, {order.adress.state}, {order.adress.postal_code}, {order.adress.country}
+    </>
+  ) : (
+    "Aucune adresse de livraison disponible"
+  )}
+</div>
+    </div>
       <div>Date: {moment(order.createDate).fromNow()}</div>
       <div>
         <h2 className='font-semibold mt-4 mb-2'>Produits commandé</h2>

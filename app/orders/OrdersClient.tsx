@@ -47,7 +47,7 @@ export const OrdersClient:React.FC<OrdersClientProps> = ({orders}) => {
 
     const columns: GridColDef[] = [
         {field:"id",headerName:'ID', width:220},
-        {field: 'custumer',headerName:'Client', width:130},
+        {field: 'customer',headerName:'Client', width:130},
         {field: 'amount',headerName:'Total(EUR)', width:130,renderCell:(params)=>{
             return(<div className='font-bold text-slate-800'>{params.row.amount}</div>)
         }},

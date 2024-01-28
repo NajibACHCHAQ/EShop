@@ -10,7 +10,7 @@ type CartContextType = {
     handleRemoveProductFromCart:(product:CartProductType)=>void;
     handleCartQtyIncrease:(product:CartProductType)=>void;
     handleCartQtyDecrease:(product:CartProductType)=>void;
-    handleClearCart:()=>void;
+    handleClearCart:(product:CartProductType)=>void;
     paymentIntent:string | null;
     handleSetPaymentIntent:(val:string | null ) => void;
 
@@ -157,11 +157,12 @@ export const CartContextProvider = (props:Props)=>{
     }
     ,[cartProducts])
 
-    const handleClearCart = useCallback((product:CartProductType)=>{
-        setCartProducts(null)
-        setCartTotalQty(0)
-        localStorage.setItem("eShopCartItems",JSON.stringify(null))
-    },[cartProducts])
+    const handleClearCart = useCallback(() => {
+        setCartProducts(null);
+        setCartTotalQty(0);
+        localStorage.setItem("eShopCartItems", JSON.stringify(null));
+      }, []);
+      
 
     const handleSetPaymentIntent = useCallback((val:string | null)=>{
         setPaymentInstant(val)
