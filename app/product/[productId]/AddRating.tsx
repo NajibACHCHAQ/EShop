@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { FieldValues, RegisterOptions, SubmitHandler, UseFormRegisterReturn, useForm } from "react-hook-form"
 import { Input } from '@/app/components/inputs/Input'
+import toast from 'react-hot-toast'
+import axios from 'axios'
 
 interface AddRatingProps{
     product:Product & {
@@ -45,7 +47,35 @@ const AddRating:React.FC<AddRatingProps> = ({product, user}) => {
 
     const onsubmit:SubmitHandler<FieldValues> = async(data)=>{
         console.log(data)
+        setIsLoading(true);
+        if(data.rating === 0) {
+            setIsLoading(false)
+            return toast.error(('Aucune étoile sélectionné'))};
+        const ratingData = {...data, userId: user?.id, product:product }
+
+        axios.post('/api/rating', ratingData).then(()=>{
+            toast.success('Rating submitted');
+            router.refresh();
+            reset();
+        }).catch((error)=>{
+           toast.error("Quelque chose s'est mal passé")
+        }).finally(()=>{
+            setIsLoading(false)
+        })
+        
     }
+
+    if(!user || !product) return null;
+
+    // const deliveredOrder= user?.orders.some(order => 
+    //     order.products.find(item => item.id === product.id) && order.deliveryStatus === 'delivered')
+
+    // const userReview = product?.reviews.find(((review:Review)=>{
+    //     return review.userId === user.id
+    // }))
+
+    // if(!userReview || !deliveredOrder) return null
+
 
   return (
     <div className="flex flex-col gap-2 max-w-[500px]">
