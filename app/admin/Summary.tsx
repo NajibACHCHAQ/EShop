@@ -74,7 +74,7 @@ export const Summary: React.FC<SummaryProps> = ({ orders, products, users }) => 
   return (
     <div className='max-w-[1150px] m-auto'>
       <div className='mb-4 mt-8'>
-        <Heading title='' center />
+        <Heading title='Statistiques' center />
       </div>
       <div className='grid grid-cols-2 gap-3 max-h-50vh overflow-y-auto'>
         {summaryKeys &&
