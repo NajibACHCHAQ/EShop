@@ -13,18 +13,18 @@ export const Categories= () => {
 
   if(!isMainPage) return null
   return (
-    <div className='bg-white'>
+    <div className='w-[65%] '>
         <Container>
-            <div className='pt-4 flex flex-row items-center justify-between overflow-x-auto'>
-                {categories.map((item)=>(
-                    <Category
-                      key={item.label}
-                      label={item.label}
-                      icon={item.icon}
-                      selected={category === item.label || (category === null && item.label === 'All') }
-                      />
-                ))}
-            </div>
+        <div className='pt-4 flex flex-col items-center justify-between md:flex-row'>
+        {categories.map((item) => (
+          <Category
+            key={item.label}
+            label={item.label}
+            icon={item.icon}
+            selected={category === item.label || (category === null && item.label === 'All')}
+          />
+        ))}
+</div>
         </Container>
     </div>
   )

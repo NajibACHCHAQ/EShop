@@ -11,8 +11,6 @@ import { SearchBar } from './SearchBar';
 const redressed = Redressed({subsets:['latin'],weight:['400']})
 export const Navbar = async () => {
   const currentUser = await getCurrentUser()
-
-  console.log("user<<<",currentUser)
   return (
     <div className="sticky top-0 w-full bg-slate-300 z-30 shadow-sm">
       <div className="py-4 border-b-[1px]">
@@ -25,7 +23,8 @@ export const Navbar = async () => {
           md:gap-0
           '>
             <Link href="/" className={`${redressed.className} font-bold text-2xl`}><span className='text-5xl '> @</span>-BOUTIQUE</Link>
-            <div className='hidden md:block'><SearchBar/></div>
+            <Categories/>
+            {/* <div className='hidden md:block'><SearchBar/></div> */}
             <div className='
             flex 
             items-center 
@@ -38,7 +37,7 @@ export const Navbar = async () => {
           </div>
         </Container>
       </div>
-      <Categories/>
+      
     </div>
     
   )
