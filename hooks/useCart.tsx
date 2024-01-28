@@ -10,7 +10,7 @@ type CartContextType = {
     handleRemoveProductFromCart:(product:CartProductType)=>void;
     handleCartQtyIncrease:(product:CartProductType)=>void;
     handleCartQtyDecrease:(product:CartProductType)=>void;
-    handleClearCart:(product:CartProductType)=>void;
+    handleClearCart:()=>void;
     paymentIntent:string | null;
     handleSetPaymentIntent:(val:string | null ) => void;
 
