@@ -24,7 +24,7 @@ export const Input:React.FC<InputProps> = (
     placeholder}
 ) => {
   return (
-    <div className='w-[95%] relative'>
+    <div className='w-[100%] relative'>
         <input 
 
         autoComplete='off'
