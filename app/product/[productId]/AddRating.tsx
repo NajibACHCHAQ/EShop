@@ -13,14 +13,14 @@ import { Input } from '@/app/components/inputs/Input'
 import toast from 'react-hot-toast'
 import axios from 'axios'
 
-interface AddRatingProps{
-    product:Product & {
-        reviews: Review[]
-    }
-    user:(SafeUser & {
-        orders:Order[]
-    }) | null
-}
+interface AddRatingProps {
+    product: (Product & {
+      reviews: Review[];
+    }) | null;
+    user: (SafeUser & {
+      orders: Order[];
+    }) | null;
+  }
 
 
 
@@ -67,14 +67,14 @@ const AddRating:React.FC<AddRatingProps> = ({product, user}) => {
 
     if(!user || !product) return null;
 
-    // const deliveredOrder= user?.orders.some(order => 
-    //     order.products.find(item => item.id === product.id) && order.deliveryStatus === 'delivered')
+    const deliveredOrder= user?.orders.some(order => 
+        order.products.find(item => item.id === product.id) && order.deliveryStatus === 'delivered')
 
-    // const userReview = product?.reviews.find(((review:Review)=>{
-    //     return review.userId === user.id
-    // }))
+    const userReview = product?.reviews.find(((review:Review)=>{
+        return review.userId === user.id
+    }))
 
-    // if(!userReview || !deliveredOrder) return null
+    if(userReview || !deliveredOrder) return null
 
 
   return (

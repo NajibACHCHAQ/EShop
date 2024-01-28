@@ -6,6 +6,7 @@ import { CartCount } from './CartCount';
 import { UserMenu } from './UserMenu';
 import { getCurrentUser } from '@/actions/GetCurrentUser';
 import { Categories} from './Categories';
+import { SearchBar } from './SearchBar';
 
 const redressed = Redressed({subsets:['latin'],weight:['400']})
 export const Navbar = async () => {
@@ -24,7 +25,7 @@ export const Navbar = async () => {
           md:gap-0
           '>
             <Link href="/" className={`${redressed.className} font-bold text-2xl`}><span className='text-5xl '> @</span>-BOUTIQUE</Link>
-            <div className='hidden md:block'>Recherche</div>
+            <div className='hidden md:block'><SearchBar/></div>
             <div className='
             flex 
             items-center 

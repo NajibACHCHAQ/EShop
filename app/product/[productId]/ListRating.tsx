@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { Heading } from '../components/Heading'
+import { Heading } from '../../components/Heading'
 import moment from 'moment'
 import Rating from '@mui/material/Rating/Rating'
 import { Avatar } from '@mui/material'
@@ -9,6 +9,7 @@ interface ListRatingProps{
     product:any
 }
 export const ListRating:React.FC<ListRatingProps> = ({product}) => {
+    if(product.reviews.length === 0 ) return null
   return (
     <div>
         <Heading title='Product reviews'/>
