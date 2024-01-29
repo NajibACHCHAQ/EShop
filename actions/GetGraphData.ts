@@ -1,60 +1,59 @@
-import prisma from '@/libs/prismadb'
-import moment from 'moment'
+import prisma from '@/libs/prismadb';
+import moment from 'moment';
+import 'moment/locale/fr'; // Importez le module de localisation français
 
-
+moment.locale('fr'); // Configurez Moment.js pour utiliser le français
 
 export default async function getGraphData() {
+  try {
+    const startDate = moment().subtract(6, 'days').startOf('day');
+    const endDate = moment().endOf('day');
 
-    try{
-        const startDate = moment().subtract(6,"days").startOf("day")
-        const endDate = moment().endOf("day")
+    const result = await prisma.order.groupBy({
+      by: ['createDate'],
+      where: {
+        createDate: {
+          gte: startDate.toISOString(),
+          lte: endDate.toISOString(),
+        },
+        status: 'complete',
+      },
+      _sum: {
+        amount: true,
+      },
+    });
 
-        const result = await prisma.order.groupBy({
-            by:["createDate"],
-            where:{
-                createDate:{
-                    gte: startDate.toISOString(),
-                    lte: endDate.toISOString(),
-              },
-              status:"complete",
-            },
-            _sum:{
-                amount:true,
-            },
-        });
+    const aggregatedData: {
+      [day: string]: { day: string; date: string; totalAmount: number };
+    } = {};
 
-        const aggregatedData:{
-            [day: string]:{day: string; date: string; totalAmount: number};
-        }={};
+    const currentDate = startDate.clone();
 
-        const currentDate = startDate.clone();
+    while (currentDate <= endDate) {
+        const day = currentDate.format('dddd');
+        console.log('day<<<<<', day, currentDate);
+      
+        aggregatedData[day] = {
+          day,
+          date: currentDate.toISOString(), // Utilisez le format ISO8601
+          totalAmount: 0,
+        };
+      
+        currentDate.add(1, 'day');
+      }
+      
 
-        while(currentDate <= endDate){
-            const day = currentDate.format("dddd");
-            console.log("day<<<<<",day, currentDate)
+    result.forEach((entry) => {
+      const day = moment(entry.createDate).format('dddd');
+      const amount = entry._sum.amount || 0;
+      aggregatedData[day].totalAmount += amount;
+    });
 
-            aggregatedData[day] = {
-                day,
-                date:currentDate.format("DD-MM-YYYY"),
-                totalAmount:0,
-
-            };
-
-            currentDate.add(1,"day")
-        }
-
-        result.forEach((entry)=>{
-            const day = moment(entry.createDate).format("dddd");
-            const amount = entry._sum.amount || 0;
-            aggregatedData[day].totalAmount += amount;
-            
-        })
-        const formatData = Object.values(aggregatedData).sort((a,b)=>
-            moment(a.date).diff(moment(b.date))
-        );
-        return formatData;
-    }catch(error:any){
-        throw new Error(error)
-    }
-    
+    const formatData = Object.values(aggregatedData).sort((a, b) =>
+      moment(a.date).diff(moment(b.date))
+    );
+    return formatData;
+  } catch (error: any) {
+    throw new Error(error);
+  }
 }
