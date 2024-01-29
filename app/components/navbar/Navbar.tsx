@@ -24,7 +24,7 @@ export const Navbar = async () => {
           '>
             <Link href="/" className={`${redressed.className} font-bold text-2xl`}><span className='text-5xl '> @</span>-BOUTIQUE</Link>
             <Categories/>
-            {/* <div className='hidden md:block'><SearchBar/></div> */}
+           
             <div className='
             flex 
             items-center 
@@ -35,6 +35,7 @@ export const Navbar = async () => {
 
             </div>
           </div>
+           {/* <div className='hidden md:block'><SearchBar/></div> */}
         </Container>
       </div>
       
