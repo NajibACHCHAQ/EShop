@@ -21,7 +21,7 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
       </div>
       <div>Order ID. {order.id}</div>
       <div>
-        Montant Total: <span className='font-bold'>{formatPrice(order.amount)}</span>
+        Montant Total: <span className='font-bold'>{formatPrice(order.amount /100)}</span>
       </div>
       <div className='flex gap-2 items-center'>
       <div>Status paiement:</div>
@@ -73,9 +73,9 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
       </div>
       <div className='flex gap-2 items-center'>
       <div>
-    {order.adress ? (
+    {order.address ? (
     <>
-      {order.adress.line1}, {order.adress.line2}, {order.adress.city}, {order.adress.state}, {order.adress.postal_code}, {order.adress.country}
+      {order.address.line1}, {order.address.line2}, {order.address.city}, {order.address.state}, {order.address.postal_code}, {order.address.country}
     </>
   ) : (
     "Aucune adresse de livraison disponible"

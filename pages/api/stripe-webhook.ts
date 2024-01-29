@@ -40,13 +40,27 @@ export default async function Handler(
         case "charge.succeeded":
             console.log("charge.succeeded event received");
             const charge: any = event.data.object as Stripe.Charge;
+            const deliveryAdress = charge.shipping.address;
             console.log("Charge details:", charge);
+            console.log(deliveryAdress)
     
             if (typeof charge.payment_intent === "string") {
                 console.log("Updating order for payment_intent:", charge.payment_intent);
                 await prisma?.order.update({
                     where: { paymentIntentId: charge.payment_intent },
-                    data: { status: "complete", adress: charge.shipping.adress },
+                    data: {
+                        status: "complete",
+                        address: {
+                            set: {
+                                city: deliveryAdress.city,
+                                country: deliveryAdress.country,
+                                line1: deliveryAdress.line1,
+                                line2: deliveryAdress.line2 || null,
+                                postal_code: deliveryAdress.postal_code,
+                                state: deliveryAdress.state || null,
+                            }
+                        }
+                    },
                 });
                 console.log("Order updated successfully");
             }

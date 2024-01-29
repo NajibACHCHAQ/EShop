@@ -81,7 +81,7 @@ model Order{
   createDate DateTime @default(now())
   paymentIntentId String @unique
   products CartProductType[]
-  adress Address?
+  address Address?
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
 }
@@ -103,9 +103,9 @@ type Address{
   city String
   country String
   line1 String
-  line2 String
+  line2 String?
   postal_code String
-  state String
+  state String?
 
 
 }
