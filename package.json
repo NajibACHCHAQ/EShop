@@ -27,8 +27,6 @@
     "axios": "^1.6.5",
     "bcrypt": "^5.1.1",
     "chart.js": "^4.4.1",
-    "eslint": "8.56.0",
-    "eslint-config-next": "14.0.4",
     "firebase": "^10.7.2",
     "micro": "^10.0.1",
     "moment": "^2.30.1",

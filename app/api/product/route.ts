@@ -1,49 +1,36 @@
-import prisma from '@/libs/prismadb'
-import { NextResponse } from 'next/server'
-import { getCurrentUser } from '@/actions/GetCurrentUser'
+import { NextResponse } from 'next/server';
+import { getCurrentUser } from '@/actions/GetCurrentUser';
+import prisma from '@/libs/prismadb';
 
-export async function POST(request:Request) {
-    const currentUser = await getCurrentUser()
+export async function POST(request: Request) {
+    try {
+        const currentUser = await getCurrentUser();
 
-    if(!currentUser) return NextResponse
-
-    if(currentUser.role !== 'ADMIN'){
-        return NextResponse.error()
-    }
-    const body = await request.json()
-    const {name ,description, price, brand, category, inStock,stockQty, images} = body
-
-
-    const product = await prisma.product.create({
-        data:{
-            name,
-            description,
-            price:parseFloat(price),
-            brand,
-            category,
-            inStock,
-            stockQty, 
-            images,
+        if (!currentUser || currentUser.role !== 'ADMIN') {
+            return NextResponse.error();
         }
-    })
-    return NextResponse.json(product)
-}
 
-export async function PUT(request:Request) {
+        const body = await request.json();
+        const { name, description, price, brand, category, inStock, stockQty, images } = body;
 
-    const currentUser = await getCurrentUser()
+        // Ajoutez ici une logique de validation des données si nécessaire.
 
-    if(!currentUser || currentUser.role !== 'ADMIN'){
-        return NextResponse.error()
+        const product = await prisma.product.create({
+            data: {
+                name,
+                description,
+                price: parseFloat(price),
+                brand,
+                category,
+                inStock,
+                stockQty,
+                images,
+            },
+        });
+
+        return NextResponse.json(product);
+    } catch (error) {
+        console.error("Error processing POST request:", error);
+        return NextResponse.error();
     }
-    const body = await request.json()
-    const {id, inStock}= body
-
-    const product = await prisma.product.update({
-        where:{id:id},
-        data:{inStock}
-    })
-
-    return NextResponse.json(product)
 }
-

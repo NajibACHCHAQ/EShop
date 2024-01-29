@@ -1,26 +1,23 @@
-import prisma from '@/libs/prismadb'
-import { NextResponse } from 'next/server'
-import { getCurrentUser } from '@/actions/GetCurrentUser'
+import prisma from '@/libs/prismadb';
+import { NextResponse } from 'next/server';
+import { getCurrentUser } from '@/actions/GetCurrentUser';
 
+export async function PUT(request: Request) {
+  const currentUser = await getCurrentUser();
 
+  if (!currentUser) return NextResponse.error();
 
-export async function PUT(request:Request) {
+  if (currentUser.role !== 'ADMIN') {
+    return NextResponse.error();
+  }
 
-    const currentUser = await getCurrentUser()
+  const body = await request.json();
+  const { id, deliveryStatus } = body;
 
-    if(!currentUser) return NextResponse
+  const order = await prisma.order.update({
+    where: { id: id },
+    data: { deliveryStatus },
+  });
 
-    if(currentUser.role !== 'ADMIN'){
-        return NextResponse.error()
-    }
-    const body = await request.json()
-    const {id, deliveryStatus}= body
-
-    const order = await prisma.order.update({
-        where:{id:id},
-        data:{deliveryStatus}
-    })
-
-    return NextResponse.json(order)
+  return NextResponse.json(order);
 }
-
