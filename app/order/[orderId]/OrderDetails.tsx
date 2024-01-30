@@ -74,9 +74,15 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
       <div className='flex gap-2 items-center'>
       <div>
     {order.address ? (
-    <>
-      {order.address.line1}, {order.address.line2}, {order.address.city}, {order.address.state}, {order.address.postal_code}, {order.address.country}
-    </>
+    
+    <div className='ml-8 flex flex-col p-2 border-[1.5px] border-gray-600 rounded-[10px]'>
+    <div className=' border-b-gray-400'>{order.address.line1}</div>
+    <div className='border-gray-400'>{order.address.city}</div> 
+    <div className='border-gray-400'>{order.address.state}</div> 
+    <div className='border-gray-400'>{order.address.postal_code}</div>
+    <div className='border-gray-400'>{order.address.country}</div>
+    </div>
+   
   ) : (
     "Aucune adresse de livraison disponible"
   )}
