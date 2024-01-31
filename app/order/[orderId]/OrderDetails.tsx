@@ -1,11 +1,11 @@
 'use client'
 import { Heading } from '@/app/components/Heading';
 import { Status } from '@/app/components/Status';
-import { formatPrice } from '@/utils/formatPrice';
+import { formatPrice } from '@/utils/formatPrice'
 import { Order } from '@prisma/client';
 import moment from 'moment';
 import React from 'react';
-import { MdAccessTimeFilled, MdDeliveryDining, MdDone } from 'react-icons/md';
+import { MdAccessTimeFilled, MdDeliveryDining, MdDone } from 'react-icons/md'
 import OrderItem from './OrderItem';
 
 interface OrderDetailsProps {
