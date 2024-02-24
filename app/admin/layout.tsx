@@ -1,14 +1,16 @@
 import React from 'react'
 import AdminNav from '../components/admin/AdminNav'
 
-
-const layout = ({children}:{children:React.ReactNode}) => {
+// Définition du composant de mise en page
+const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
-        <AdminNav/>
-        {children}
+      {/* Affichage de la barre de navigation de l'administrateur */}
+      <AdminNav />
+      {/* Affichage du contenu de la page qui sera passé en tant qu'enfant */}
+      {children}
     </div>
   )
 }
 
-export default layout
+export default Layout
