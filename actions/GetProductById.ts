@@ -1,42 +1,37 @@
-// Importation de Prisma pour interagir avec la base de données
 import prisma from '@/libs/prismadb'
 
-// Définition d'une interface pour les paramètres de la fonction getProductById
-interface IParams {
-    productId?: string // L'identifiant du produit est optionnel car il pourrait ne pas être fourni
+interface IParams{
+    productId?: string
 }
 
-// Fonction asynchrone qui récupère un produit à partir de son identifiant
-export default async function getProductById(params: IParams) {
-    try {
-        const { productId } = params // Extraction de l'identifiant du produit à partir des paramètres
+export default async function getProductById(params:IParams){
 
-        // Recherche du produit dans la base de données en utilisant l'identifiant fourni
+    try{
+        const{productId} = params
         const product = await prisma.product.findUnique({
-            where: {
-                id: productId // Filtre sur l'identifiant du produit
+            where:{
+                id:productId
             },
-            include: {
-                reviews: { // Inclusion des critiques associées au produit
-                    include: {
-                        user: true // Inclusion de l'utilisateur associé à chaque critique
+            include:{
+                reviews:{
+                    include:{
+                        user:true
                     },
-                    orderBy: {
-                        createdDate: 'desc' // Tri des critiques par date de création dans un ordre descendant
+                    orderBy:{
+                        createdDate: 'desc'
                     }
                 }
             }
         })
 
-        // Si le produit n'est pas trouvé, retourner null
-        if (!product)
+        if(!product)
             return null
         
-        // Retourner le produit trouvé avec ses éventuelles critiques associées
+
         return product
 
-    } catch (error: any) {
-        // En cas d'erreur lors de l'exécution de la fonction, la lever pour la gérer ailleurs
+    }catch(error:any){
         throw new Error(error)
     }
+
 }

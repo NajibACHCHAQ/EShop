@@ -1,32 +1,27 @@
-// Importation de Prisma pour interagir avec la base de données
 import prisma from '@/libs/prismadb'
 
-// Définition d'une interface pour les paramètres de la fonction getOrderById
-interface IParams {
-    orderId?: string // L'identifiant de la commande est optionnel car il pourrait ne pas être fourni
+interface IParams{
+    orderId?: string
 }
 
-// Fonction asynchrone qui récupère une commande à partir de son identifiant
-export default async function getOrderById(params: IParams) {
-    try {
-        const { orderId } = params // Extraction de l'identifiant de la commande à partir des paramètres
+export default async function getOrderById(params:IParams){
 
-        // Recherche de la commande dans la base de données en utilisant l'identifiant fourni
+    try{
+        const{orderId} = params
         const order = await prisma.order.findUnique({
-            where: {
-                id: orderId // Filtre sur l'identifiant de la commande
+            where:{
+                id:orderId
             }
         })
 
-        // Si la commande n'est pas trouvée, retourner null
-        if (!order)
+        if(!order)
             return null
         
-        // Retourner la commande trouvée
+
         return order
 
-    } catch (error: any) {
-        // En cas d'erreur, la lever pour la gérer ailleurs
+    }catch(error:any){
         throw new Error(error)
     }
+
 }

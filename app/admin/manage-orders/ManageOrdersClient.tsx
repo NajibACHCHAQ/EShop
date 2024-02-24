@@ -1,6 +1,5 @@
 'use client'
 
-// Importations des modules nécessaires
 import { Order, User } from '@prisma/client'
 import React, { useCallback } from 'react'
 import {DataGrid, GridColDef} from '@mui/x-data-grid'
@@ -16,28 +15,22 @@ import { getStorage } from 'firebase/storage'
 import firebaseApp from '@/libs/firebase'
 import moment from 'moment'
 
-// Définition de l'interface des propriétés du composant
 interface ManageOrdersClientProps{
     orders:ExtendedOrders[]
 }
-
-// Définition d'un type étendu pour les commandes
 type ExtendedOrders = Order & {
     user:User
 }
 
-// Composant de gestion des commandes client
 export const ManageOrdersClient:React.FC<ManageOrdersClientProps> = ({orders}) => {
     // Assurez-vous que vous utilisez la bonne méthode et la bonne condition
 
-    // Log des données récupérées depuis la base de données
     console.log('Données récupérées depuis la base de données :',orders);
-    
-    // Initialisation du routeur et de la référence de stockage Firebase
     const router = useRouter()
     const storage = getStorage(firebaseApp)
 
-    // Transformation des données des commandes pour les adapter à la grille de données
+
+
     let rows:any =[]
     if(orders){
         rows = orders.map((order)=>{
@@ -52,7 +45,6 @@ export const ManageOrdersClient:React.FC<ManageOrdersClientProps> = ({orders}) =
         })
     }
 
-    // Définition des colonnes de la grille de données
     const columns: GridColDef[] = [
         {field:"id",headerName:'ID', width:220},
         {field: 'customer',headerName:'Client', width:130},
@@ -99,7 +91,6 @@ export const ManageOrdersClient:React.FC<ManageOrdersClientProps> = ({orders}) =
         }}
     ]
 
-    // Fonction pour gérer l'envoi d'une commande
     const handleDispatch = useCallback((id:string)=>{
         axios.put('/api/order',{
             id,
@@ -113,7 +104,6 @@ export const ManageOrdersClient:React.FC<ManageOrdersClientProps> = ({orders}) =
         })
     },[])
 
-    // Fonction pour gérer la livraison d'une commande
     const handleDeliver = useCallback((id:string)=>{
         axios.put('/api/order',{
             id,
