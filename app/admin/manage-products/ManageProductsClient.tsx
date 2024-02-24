@@ -1,8 +1,6 @@
-'use client'
-
 import { Product } from '@prisma/client'
 import React, { useCallback } from 'react'
-import {DataGrid, GridColDef} from '@mui/x-data-grid'
+import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { formatPrice } from '@/utils/formatPrice'
 import { Heading } from '@/app/components/Heading'
 import { Status } from '@/app/components/Status'
@@ -14,122 +12,124 @@ import toast from 'react-hot-toast'
 import { deleteObject, getStorage, ref } from 'firebase/storage'
 import firebaseApp from '@/libs/firebase'
 
-interface ManageProductsClientProps{
-    products:Product[]
+interface ManageProductsClientProps {
+    products: Product[]
 }
 
-export const ManageProductsClient:React.FC<ManageProductsClientProps> = ({products}) => {
-    // Assurez-vous que vous utilisez la bonne méthode et la bonne condition
-console.log('Données récupérées depuis la base de données :', products);
-
-    console.log('Données récupérées depuis la base de données :', products);
+export const ManageProductsClient: React.FC<ManageProductsClientProps> = ({ products }) => {
+    // Récupération du routeur Next.js
     const router = useRouter()
+    
+    // Initialisation du stockage Firebase
     const storage = getStorage(firebaseApp)
 
-    let rows:any =[]
-    if(products){
-        rows = products.map((product)=>{
-            return{
-                id:product.id,
-                name:product.name,
-                price:formatPrice(product.price),
-                category:product.category,
-                brand:product.brand,
-                inStock:product.inStock,
-                images:product.images
+    // Construction des lignes pour la grille de données
+    let rows: any = []
+    if (products) {
+        rows = products.map((product) => {
+            return {
+                id: product.id,
+                name: product.name,
+                price: formatPrice(product.price),
+                category: product.category,
+                brand: product.brand,
+                inStock: product.inStock,
+                images: product.images
             }
         })
     }
 
+    // Définition des colonnes pour la grille de données
     const columns: GridColDef[] = [
-        {field:"id",headerName:'ID', width:220},
-        {field: 'name',headerName:'Name', width:220},
-        {field: 'price',headerName:'Price(EUR)', width:100,renderCell:(params)=>{
-            return(<div className='font-bold text-slate-800'>{params.row.price}</div>)
+        { field: "id", headerName: 'ID', width: 220 },
+        { field: 'name', headerName: 'Name', width: 220 },
+        { field: 'price', headerName: 'Price(EUR)', width: 100, renderCell: (params) => {
+            return (<div className='font-bold text-slate-800'>{params.row.price}</div>)
         }},
-        {field: 'category',headerName:'Category', width:100},
-        {field: 'brand',headerName:'Brand', width:100},
-        {field: 'inStock',headerName:'InStock', width:130,renderCell:(params)=>{
-            return(<div >{params.row.inStock === true ? (
+        { field: 'category', headerName: 'Category', width: 100 },
+        { field: 'brand', headerName: 'Brand', width: 100 },
+        { field: 'inStock', headerName: 'InStock', width: 130, renderCell: (params) => {
+            return (<div >{params.row.inStock === true ? (
             <Status text='en stock' icon={MdDone} bg="bg-teal-200" color='text-teal-700'/>
             ) : (
             <Status text='rupture' icon={MdClose} bg='bg-rose-200' color='text-rose-700'/>) }</div>)
         }},
-        {field: 'action',headerName:'Actions', width:200,renderCell:(params)=>{
-            return(<div className='flex justify-between gap-4 w-full' >
-                <ActionBtn icon={MdCached} onClick={()=>{handleToggleStock(params.row.id, params.row.inStock)}} />
-                <ActionBtn icon={MdDelete} onClick={()=>{handleDelete(params.row.id, params.row.images)}} />
-                <ActionBtn icon={MdRemoveRedEye} onClick={()=>{
+        { field: 'action', headerName: 'Actions', width: 200, renderCell: (params) => {
+            return (<div className='flex justify-between gap-4 w-full' >
+                <ActionBtn icon={MdCached} onClick={() => { handleToggleStock(params.row.id, params.row.inStock) }} />
+                <ActionBtn icon={MdDelete} onClick={() => { handleDelete(params.row.id, params.row.images) }} />
+                <ActionBtn icon={MdRemoveRedEye} onClick={() => {
                     router.push(`product/${params.row.id}`)
                 }} />
-                
-                </div>
-                
-                )
+            </div>)
         }}
     ]
 
-    const handleToggleStock = useCallback((id:string,inStock:boolean)=>{
-        axios.put('/api/product',{
+    // Fonction pour changer le statut du stock du produit
+    const handleToggleStock = useCallback((id: string, inStock: boolean) => {
+        axios.put('/api/product', {
             id,
             inStock: !inStock
-        }).then((res)=>{
+        }).then((res) => {
             toast.success('Status du produit changé')
             router.refresh();
-        }).catch((err)=>{
-            toast.error('Oops! Somethings went wrong')
+        }).catch((err) => {
+            toast.error('Oops! Quelque chose s\'est mal passé')
             console.log(err)
         })
-    },[])
-    const handleDelete = useCallback(async(id:string,images:any)=>{
+    }, [])
+
+    // Fonction pour supprimer un produit
+    const handleDelete = useCallback(async (id: string, images: any) => {
         toast('Suppression du produit...')
-        const handleImageDelete = async ()=>{
-            try{
-                for(const item of images){
-                    if(item.image){
+        const handleImageDelete = async () => {
+            try {
+                for (const item of images) {
+                    if (item.image) {
                        const imageRef = ref(storage, item.image)
                        await deleteObject(imageRef)
-                       console.log('image supprimmée',item.image)
+                       console.log('image supprimmée', item.image)
                     }
                 }
-            }catch(error){
-                return console.log("Erreur lors de la suppression de l'image",error)
+            } catch (error) {
+                return console.log("Erreur lors de la suppression de l'image", error)
             }
         }
 
         await handleImageDelete()
 
         axios.delete(`/api/product/${id}`).then(
-            (res)=>{
+            (res) => {
                 toast.success('produit supprimé')
                 router.refresh()
             }
-        ).catch((err)=>{
+        ).catch((err) => {
             toast.error('Erreur lors de la suppression du produit')
             console.log(err)
         })
         
-    },[])
+    }, [])
 
-  return (
-    <div className='max-w-[1450px] m-auto text-xl'>
-        <div className='mb-4 mt-8'>
-            <Heading title='Gestion produits' center/>
+    // Rendu du composant
+    return (
+        <div className='max-w-[1450px] m-auto text-xl'>
+            <div className='mb-4 mt-8'>
+                <Heading title='Gestion produits' center/>
+            </div>
+            <div style={{height: 600, width: '100%'}}>
+                <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    initialState={{
+                        pagination: {
+                            paginationModel: { page: 0, pageSize: 5 },
+                        },
+                    }}
+                    pageSizeOptions={[5, 10]}
+                    checkboxSelection
+                    disableRowSelectionOnClick
+                />
+            </div>
         </div>
-        <div style={{height:600, width:'100%'}}>
-        <DataGrid
-            rows={rows}
-            columns={columns}
-            initialState={{
-                pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-                },
-            }}
-            pageSizeOptions={[5, 10]}
-            checkboxSelection
-            disableRowSelectionOnClick
-            />
-        </div>
-    </div>
-  )
+    )
 }

@@ -6,18 +6,24 @@ import NullData from '@/app/components/NullData'
 import getOrders from '@/actions/GetOrders'
 
 const ManageOrders = async () => {
+  // Récupération des commandes
   const orders = await getOrders()
+  
+  // Récupération de l'utilisateur actuel
   const currentUser = await getCurrentUser()
 
-  if(!currentUser || currentUser.role !== 'ADMIN'){
-    return <NullData title="Oops vous n'avez pas acces"/>
-}
+  // Vérification des autorisations de l'utilisateur
+  if (!currentUser || currentUser.role !== 'ADMIN') {
+    // Affichage d'un message d'erreur si l'utilisateur n'est pas administrateur
+    return <NullData title="Oops vous n'avez pas accès"/>
+  }
+
+  // Affichage de la liste des commandes dans un composant de gestion
   return (
     <div>
       <Container>
-      <ManageOrdersClient orders ={orders}/>
+        <ManageOrdersClient orders={orders}/>
       </Container>
-      
     </div>
   )
 }
