@@ -30,7 +30,7 @@ export const Footer = () => {
 
           <div className='w-full md:w-1/3 mb-6 md:bb-0'>
           <h3 className='text-base font-bold mb-2'>A propos</h3>
-            <p className='mb-2'>chez TechBargains, votre destination ultime pour les produits high-tech au meilleur prix. Nous sommes passionnés par la technologie et déterminés à offrir à nos clients les dernières innovations à des prix imbattables. Chez TechBargains, nous croyons que chacun mérite d'avoir accès aux produits technologiques les plus avancés sans se ruiner.
+            <p className='mb-2'>Votre destination ultime pour les produits high-tech au meilleur prix. Nous sommes passionnés par la technologie et déterminés à offrir à nos clients les dernières innovations à des prix imbattables. Chez TechBargains, nous croyons que chacun mérite d'avoir accès aux produits technologiques les plus avancés sans se ruiner.
             </p>
             <p>&copy; {new Date().getFullYear() }
              E-Shop. All rights reserved</p>
