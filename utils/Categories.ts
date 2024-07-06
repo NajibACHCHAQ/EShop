@@ -4,23 +4,23 @@ import { MdOutlineKeyboard, MdStorefront, MdTv, MdWatch } from 'react-icons/md'
 
 export const categories =[
     {
-        label:'All',
+        label:'Tout',
         icon:MdStorefront
     },
     {
-        label:'Phone',
+        label:'Smartphone',
         icon:AiFillPhone
     },
     {
-        label:'Laptop',
+        label:'PC Portable',
         icon:AiOutlineLaptop
     },
     {
-        label:'Desktop',
+        label:'Ordinateur portable',
         icon:AiOutlineDesktop
     },
     {
-        label:'Watch',
+        label:'Montre connecté',
         icon:MdWatch
     },
     {
@@ -28,7 +28,7 @@ export const categories =[
         icon:MdTv
     },
     {
-        label:'Accesories',
+        label:'Accessoire',
         icon:MdOutlineKeyboard
     },
 
